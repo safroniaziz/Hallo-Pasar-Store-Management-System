@@ -4,6 +4,8 @@
 <script src="https://cdn.datatables.net/responsive/2.2.3/js/responsive.bootstrap4.min.js"></script>
 <script>
     $(document).ready( function () {
-        $('#myTable').DataTable();
+        $('#myTable').DataTable({
+            responsive: true
+        });
     } );
 </script>

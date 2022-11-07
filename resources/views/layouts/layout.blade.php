@@ -4,6 +4,7 @@
 <head>
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="csrf-token" content="{{ csrf_token() }}">
   <title>HalloPasar Bengkulu</title>
   <!-- Tell the browser to be responsive to screen width -->
   <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
@@ -35,8 +36,39 @@
 <!-- ADD THE CLASS layout-top-nav TO REMOVE THE SIDEBAR. -->
 <body class="hold-transition skin-blue layout-top-nav">
 <div class="wrapper">
+    <header class="main-header">
+        <nav class="navbar navbar-static-top">
+            <div class="container">
+                <div class="navbar-header">
+                    @if (Auth::user()->tipe_user == "admin")
+                        <a href="{{ route('admin.dashboard') }}" class="navbar-brand" style="padding:15px 15px 15px 30px !important;"><b>HalloPasar </b></a>
+                    @endif
+                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-collapse">
+                    <i class="fa fa-bars"></i>
+                </button>
+            </div>
 
-  <header class="main-header">
+            <div class="collapse navbar-collapse pull-left" id="navbar-collapse">
+                <ul class="nav navbar-nav">
+                    @yield('topbar')
+                </ul>
+            </div>
+            <div class="navbar-custom-menu">
+                <ul class="nav navbar-nav">
+                    <li class="dropdown user user-menu" style="background-color:#dd4b39">
+                        <!-- Menu Toggle Button -->
+                        <!-- The user image in the navbar-->
+                        <!-- hidden-xs hides the username on small devices so only the image appears. -->
+                        <a href="{{ route('logout') }}" ><i class="fa fa-sign-in"></i>&nbsp;Logout</a>
+                    </li>
+                </ul>
+            </div>
+            <!-- /.navbar-custom-menu -->
+        </div>
+        <!-- /.container-fluid -->
+        </nav>
+    </header>
+  {{-- <header class="main-header">
     <nav class="navbar navbar-static-top">
       <div class="container">
         <div class="navbar-header">
@@ -68,7 +100,7 @@
       </div>
       <!-- /.container-fluid -->
     </nav>
-  </header>
+  </header> --}}
   <!-- Full Width Column -->
   <div class="content-wrapper">
     <div class="container">

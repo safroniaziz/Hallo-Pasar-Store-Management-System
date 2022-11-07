@@ -51,35 +51,31 @@ class KategoriProdukController extends Controller
             'thumbnail'    =>  'Thumbnail',
         ];
         $this->validate($request,[
-            'thumbnail'     => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:1000',
             'nama_kategori' =>  'required',
+            'thumbnail' =>  'required',
         ],$messages,$attributes);
         DB::beginTransaction();
         try {
             $slug_name = Str::slug($request->nama_kategori);
-            $model['thumbnail'] = null;
-            if ($request->hasFile('thumbnail')) {
-                $model['thumbnail'] = 'gambar_kategori'.'-'.$slug_name.'-'.md5(uniqid(rand(), true)).'.'.$request->thumbnail->getClientOriginalExtension();
-                $request->thumbnail->move(public_path('/upload/gambar_kategori/'), $model['thumbnail']);
-            }
-
-            KategoriProduk::create([
+            $model['thumbnail'] = 'gambar_kategori'.'-'.$slug_name.'-'.md5(uniqid(rand(), true)).'.'.'png';
+            $data = $request->thumbnail;
+            list($type, $data) = explode(';', $data);
+            list(, $data)      = explode(',', $data);
+            $data = base64_decode($data);
+            $url = public_path().'/upload/gambar_kategori';
+            file_put_contents($url.'/'.$model['thumbnail'],$data);
+            $upload = KategoriProduk::create([
                 'nama_kategori' =>  $request->nama_kategori,
                 'thumbnail' =>  $model['thumbnail'],
             ]);
             DB::commit();
-            $notification = array(
-                'message' => 'Berhasil, data kategori produk berhasil ditambahkan!',
-                'alert-type' => 'success'
-            );
-            return redirect()->route('admin.kategori_produk')->with($notification);
+                return response()->json([
+                    'success' => true,
+                ]);
         } catch (\Exception $e) {
-            DB::rollback();
-            $notification = array(
-                'message' => 'Gagal, data kategori produk gagal ditambahkan!',
-                'alert-type' => 'error'
-            );
-            return redirect()->route('admin.kategori_produk')->with($notification);
+            return response()->json([
+                'success' => false,
+            ]);
         }
     }
 

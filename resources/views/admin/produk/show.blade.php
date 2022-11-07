@@ -13,10 +13,10 @@
 @section('content')
     <section class="content">
         <div class="row">
-            <div class="col-md-5">
+            <div class="col-md-4">
                 @include('admin/produk._informasi_detail')
             </div>
-            <div class="col-md-7">
+            <div class="col-md-8">
                 @include('admin/produk._detail_gambar')
             </div>
         </div>

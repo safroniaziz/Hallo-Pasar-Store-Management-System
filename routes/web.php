@@ -49,7 +49,7 @@ Route::middleware('auth')->group(function() {
             Route::delete('{produk}/delete',[ProdukController::class, 'destroy'])->name('admin.produk.delete');
             Route::get('{produk}/show',[ProdukController::class, 'show'])->name('admin.produk.show');
 
-            Route::post('{produk}/post',[ProdukController::class, 'fotoStore'])->name('admin.produk.foto_post');
+            Route::post('/post_gambar',[ProdukController::class, 'fotoStore'])->name('admin.produk.foto_post_gambar');
             Route::delete('{foto_produk}/delete_foto',[ProdukController::class, 'fotoDestroy'])->name('admin.produk.delete_foto');
 
         });

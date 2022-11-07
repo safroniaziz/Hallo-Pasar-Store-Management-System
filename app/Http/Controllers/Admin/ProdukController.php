@@ -57,30 +57,35 @@ class ProdukController extends Controller
             'diskon'            =>  'Diskon',
             'tambahan'          =>  'Tambahan Biaya',
             'satuan'            =>  'Satuan',
-            'point'              =>  'Point',
+            'point'             =>  'Point',
             'deskripsi'         =>  'Deskripsi',
+            'is_display'        =>  'Tampilkan Produk',
+            'is_paketan'        =>  'Produk Paketan',
         ];
         $this->validate($request,[
             'kategori_id'   =>  'required',
             'nama_produk'   =>  'required',
-            'foto_produk'   =>  'image|mimes:jpeg,png,jpg,gif,svg',
+            'foto_produk'   =>  'required',
             'harga'         =>  'required',
             'diskon'        =>  'required',
             'tambahan'      =>  'required',
             'satuan'        =>  'required',
             'point'         =>  'required',
             'deskripsi'     =>  'required',
+            'is_display'    =>  'required',
+            'is_paketan'    =>  'required',
         ],$messages,$attributes);
         DB::beginTransaction();
         try {
             $slug_name = Str::slug($request->nama_produk);
-            $model['foto_produk'] = null;
-            if ($request->hasFile('foto_produk')) {
-                $model['foto_produk'] = 'foto_produk'.'-'.$slug_name.'-'.md5(uniqid(rand(), true)).'.'.$request->foto_produk->getClientOriginalExtension();
-                $request->foto_produk->move(public_path('/upload/foto_produk/'), $model['foto_produk']);
-            }
-
-            $array = [
+            $model['foto_produk'] = 'foto_produk'.'-'.$slug_name.'-'.md5(uniqid(rand(), true)).'.'.'png';
+            $data = $request->foto_produk;
+            list($type, $data) = explode(';', $data);
+            list(, $data)      = explode(',', $data);
+            $data = base64_decode($data);
+            $url = public_path().'/upload/foto_produk';
+            file_put_contents($url.'/'.$model['foto_produk'],$data);
+            $upload = Produk::create([
                 'nama_kategori' =>  $request->nama_kategori,
                 'kategori_id'   =>  $request->kategori_id,
                 'nama_produk'   =>  $request->nama_produk,
@@ -91,33 +96,17 @@ class ProdukController extends Controller
                 'satuan'        =>  $request->satuan,
                 'point'         =>  $request->point,
                 'deskripsi'     =>  $request->deskripsi,
-            ];
-            if ($request->has('is_display')){
-                $array['is_display']  =  true;
-            }else{
-                $array['is_display']  =  false;
-            }
-
-            if ($request->has('is_paketan')){
-                $array['is_paketan']  =  true;
-            }else{
-                $array['is_paketan']  =  false;
-            }
-            Produk::create($array);
-
+                'is_display'    =>  $request->is_display,
+                'is_paketan'    =>  $request->is_paketan,
+            ]);
             DB::commit();
-            $notification = array(
-                'message' => 'Berhasil, data produk berhasil ditambahkan!',
-                'alert-type' => 'success'
-            );
-            return redirect()->route('admin.produk')->with($notification);
+            return response()->json([
+                'success' => true,
+            ]);
         } catch (\Exception $e) {
-            DB::rollback();
-            $notification = array(
-                'message' => 'Gagal, data produk gagal diubah!',
-                'alert-type' => 'error'
-            );
-            return redirect()->route('admin.produk')->with($notification);
+            return response()->json([
+                'success' => false,
+            ]);
         }
     }
 
@@ -261,34 +250,32 @@ class ProdukController extends Controller
             'foto_produk'    =>  'Foto Produk',
         ];
         $this->validate($request,[
-            'foto_produk'     => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            'foto_produk'     => 'required',
         ],$messages,$attributes);
         DB::beginTransaction();
         try {
-            $slug_name = Str::slug($request->nama_kategori);
-            $model['foto_produk'] = null;
-            if ($request->hasFile('foto_produk')) {
-                $model['foto_produk'] = 'foto_produk_detail'.'-'.$slug_name.'-'.md5(uniqid(rand(), true)).'.'.$request->foto_produk->getClientOriginalExtension();
-                $request->foto_produk->move(public_path('/upload/foto_produk_detail/'), $model['foto_produk']);
-            }
+            $slug_name = Str::slug($request->nama_produk);
+            $model['foto_produk'] = 'foto_produk_detail'.'-'.$slug_name.'-'.md5(uniqid(rand(), true)).'.'.'png';
+            $data = $request->foto_produk;
+            list($type, $data) = explode(';', $data);
+            list(, $data)      = explode(',', $data);
+            $data = base64_decode($data);
+            $url = public_path().'/upload/foto_produk_detail';
+            file_put_contents($url.'/'.$model['foto_produk'],$data);
 
             FotoProduk::create([
-                'produk_id' =>  $produk->id,
+                'produk_id' =>  $request->produk_id,
                 'foto_produk' =>  $model['foto_produk'],
             ]);
             DB::commit();
-            $notification = array(
-                'message' => 'Berhasil, foto produk berhasil ditambahkan!',
-                'alert-type' => 'success'
-            );
-            return redirect()->route('admin.produk.show',[$produk->id])->with($notification);
+            return response()->json([
+                'success' => true,
+            ]);
         } catch (\Exception $e) {
             DB::rollback();
-            $notification = array(
-                'message' => 'Gagal, foto produk gagal ditambahkan!',
-                'alert-type' => 'error'
-            );
-            return redirect()->route('admin.produk.show',[$produk->id])->with($notification);
+            return response()->json([
+                'success' => false,
+            ]);
         }
     }
 

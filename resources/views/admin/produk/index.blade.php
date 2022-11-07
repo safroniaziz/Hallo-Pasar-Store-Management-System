@@ -56,10 +56,10 @@
                                             Rp.{{ number_format($produk->diskon) }}
                                         </td>
                                         <td>
-                                            Rp.{{ number_format($produk->biaya_tambahan) }}
+                                            Rp.{{ number_format($produk->tambahan) }}
                                         </td>
                                         <td>
-                                            Rp.{{ number_format(($produk->harga + $produk->biaya_tambahan)- $produk->diskon) }}
+                                            Rp.{{ number_format(($produk->harga + $produk->tambahan)- $produk->diskon) }}
                                         </td>
                                         <td>
                                             @if ($produk->is_paketan == true)
