@@ -2,12 +2,16 @@
 
 use App\Http\Controllers\Admin\AdminDashboardController;
 use App\Http\Controllers\Admin\KategoriProdukController;
+use App\Http\Controllers\Admin\KecamatanController;
+use App\Http\Controllers\Admin\KelurahanController;
+use App\Http\Controllers\Admin\KotaController;
 use App\Http\Controllers\Admin\ProdukController;
 use App\Http\Controllers\FrontEndController;
 use App\Http\Controllers\Admin\MetodePembayaranController;
 use App\Http\Controllers\Admin\TransaksiController;
 use App\Http\Controllers\Admin\PelangganController;
 use App\Http\Controllers\Admin\PelangganPointController;
+use App\Http\Controllers\Admin\ProvinsiController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
@@ -48,7 +52,6 @@ Route::middleware('auth')->group(function() {
             Route::patch('/{produk}/update',[ProdukController::class, 'update'])->name('admin.produk.update');
             Route::delete('{produk}/delete',[ProdukController::class, 'destroy'])->name('admin.produk.delete');
             Route::get('{produk}/show',[ProdukController::class, 'show'])->name('admin.produk.show');
-
             Route::post('/post_gambar',[ProdukController::class, 'fotoStore'])->name('admin.produk.foto_post_gambar');
             Route::delete('{foto_produk}/delete_foto',[ProdukController::class, 'fotoDestroy'])->name('admin.produk.delete_foto');
 
@@ -61,6 +64,35 @@ Route::middleware('auth')->group(function() {
             Route::get('/{metodePembayaran}/edit',[MetodePembayaranController::class, 'edit'])->name('admin.metode.edit');
             Route::patch('/{metodePembayaran}/update',[MetodePembayaranController::class, 'update'])->name('admin.metode.update');
             Route::delete('{metodePembayaran}/delete',[MetodePembayaranController::class, 'destroy'])->name('admin.metode.delete');
+        });
+
+        Route::prefix('data_provinsi')->group(function() {
+            Route::get('/',[ProvinsiController::class, 'index'])->name('admin.provinsi');
+            Route::get('/create',[ProvinsiController::class, 'create'])->name('admin.provinsi.create');
+            Route::post('/post',[ProvinsiController::class, 'store'])->name('admin.provinsi.post');
+            Route::get('/{metodePembayaran}/edit',[ProvinsiController::class, 'edit'])->name('admin.provinsi.edit');
+            Route::patch('/{metodePembayaran}/update',[ProvinsiController::class, 'update'])->name('admin.provinsi.update');
+            Route::delete('{metodePembayaran}/delete',[ProvinsiController::class, 'destroy'])->name('admin.provinsi.delete');
+        });
+
+        Route::prefix('data_kota')->group(function() {
+            Route::get('/',[KotaController::class, 'index'])->name('admin.kota');
+            Route::get('/create',[KotaController::class, 'create'])->name('admin.kota.create');
+            Route::post('/post',[KotaController::class, 'store'])->name('admin.kota.post');
+            Route::get('/{metodePembayaran}/edit',[KotaController::class, 'edit'])->name('admin.kota.edit');
+            Route::patch('/{metodePembayaran}/update',[KotaController::class, 'update'])->name('admin.kota.update');
+            Route::delete('{metodePembayaran}/delete',[KotaController::class, 'destroy'])->name('admin.kota.delete');
+        });
+
+        Route::prefix('data_kecamatan')->group(function() {
+            Route::get('/',[KecamatanController::class, 'index'])->name('admin.kecamatan');
+            Route::get('/create',[KecamatanController::class, 'create'])->name('admin.kecamatan.create');
+            Route::post('/post',[KecamatanController::class, 'store'])->name('admin.kecamatan.post');
+            Route::get('/{metodePembayaran}/edit',[KecamatanController::class, 'edit'])->name('admin.kecamatan.edit');
+            Route::patch('/{metodePembayaran}/update',[KecamatanController::class, 'update'])->name('admin.kecamatan.update');
+
+            Route::get('{kecamatan}/',[KelurahanController::class, 'index'])->name('admin.kelurahan');
+            Route::patch('{kecamatan}/kelurahan/{kelurahan}',[KelurahanController::class, 'update'])->name('admin.kelurahan.update');
         });
 
         Route::prefix('data_pelanggan')->group(function() {
@@ -82,7 +114,13 @@ Route::middleware('auth')->group(function() {
             Route::get('/{transaksi}/edit',[TransaksiController::class, 'edit'])->name('admin.transaksi.edit');
             Route::patch('/{transaksi}/update',[TransaksiController::class, 'update'])->name('admin.transaksi.update');
             Route::delete('{transaksi}/delete',[TransaksiController::class, 'destroy'])->name('admin.transaksi.delete');
+            Route::get('{transaksi}/show',[TransaksiController::class, 'show'])->name('admin.transaksi.show');
 
+
+            Route::get('/cari_kota',[TransaksiController::class, 'cariKota']);
+            Route::get('/cari_kecamatan',[TransaksiController::class, 'cariKecamatan']);
+            Route::get('/cari_kelurahan',[TransaksiController::class, 'cariKelurahan']);
+            Route::get('/cari_ongkir',[TransaksiController::class, 'cariOngkir']);
         });
     });
 });

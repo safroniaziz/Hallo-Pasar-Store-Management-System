@@ -3,8 +3,9 @@
     <a style="color:#3c8dbc">{{ Session::get('nama_lengkap') }}</a>
 @endsection
 @push('styles')
-    @include('css/tambahan')
-    @include('css/datatables')
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.20/css/dataTables.bootstrap4.min.css">
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/responsive/2.2.3/css/responsive.bootstrap4.min.css">
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/buttons/1.7.1/css/buttons.dataTables.min.css">
 @endpush
 @section('topbar')
     @include('admin/topbar')
@@ -21,49 +22,17 @@
             <div class="box-body">
                 <div class="row">
                     <div class="col-md-12">
-                        <table class="table table-striped table-bordered table-hover" id="myTable" style="width:100% !important">
+                        <table id="tbl_list" class="table table-striped table-bordered" cellspacing="0" width="100%">
                             <thead>
                                 <tr>
                                     <th>No</th>
                                     <th>Nama Pelanggan</th>
-                                    <th>Metode Pembayaran</th>
-                                    <th>Kelurahan</th>
-                                    <th>Alamat</th>
                                     <th>Total Belanja</th>
+                                    <th>Alamat</th>
+                                    <th>No. Handphone</th>
                                     <th>Aksi</th>
                                 </tr>
                             </thead>
-                            <tbody>
-                                @foreach ($transaksis as $index=> $transaksi)
-                                    <tr>
-                                        <td>{{ $index+1 }}</td>
-                                        <td>{{ $transaksi->pelanggan->nama_pelanggan }}</td>
-                                        <td>{{ $transaksi->metode_pembyaran->nama_metode }}</td>
-                                        <td>{{ $transaksi->kelurahan }}</td>
-                                        <td>{{ $transaksi->alamat }}</td>
-                                        <td>{{ $transaksi->total }}</td>
-                                        <td>
-                                            <table>
-                                                <tr>
-                                                    <td>
-                                                        <a href="{{ route('admin.transaksi.show',[$transaksi->id]) }}" class="btn btn-success btn-sm btn-flat"><i class="fa fa-info-circle"></i>&nbsp; Detail</a>
-                                                    </td>
-                                                    <td>
-                                                        <a href="{{ route('admin.transaksi.edit',[$transaksi->id]) }}" class="btn btn-primary btn-sm btn-flat"><i class="fa fa-edit"></i>&nbsp; Edit</a>
-                                                    </td>
-                                                    <td>
-                                                        <form action="{{ route('admin.transaksi.delete',[$transaksi->id]) }}" method="POST">
-                                                            {{ csrf_field() }} {{ method_field("DELETE") }}
-                                                            <a href="" onClick="return confirm('Apakah anda yakin menghapus data ini?')"/><button type="submit" class="btn btn-danger btn-sm btn-flat"><i class="fa fa-trash"></i>&nbsp; Hapus</button></a>
-
-                                                        </form>
-                                                    </td>
-                                                </tr>
-                                            </table>
-                                        </td>
-                                    </tr>
-                                @endforeach
-                            </tbody>
                         </table>
                     </div>
                 </div>
@@ -72,6 +41,45 @@
         </div>
     </section>
 @endsection
+@push('datatables')
+<script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/1.10.20/js/dataTables.bootstrap4.min.js"></script>
+<script src="https://cdn.datatables.net/responsive/2.2.3/js/dataTables.responsive.min.js"></script>
+<script src="https://cdn.datatables.net/responsive/2.2.3/js/responsive.bootstrap4.min.js"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/buttons/1.7.1/js/dataTables.buttons.min.js"></script>
+<script src="https://cdn.datatables.net/buttons/1.5.2/js/buttons.flash.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.36/pdfmake.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.36/vfs_fonts.js"></script>
+<script src="https://cdn.datatables.net/buttons/1.5.2/js/buttons.html5.min.js   "></script>
+<script src="https://cdn.datatables.net/buttons/1.2.2/js/buttons.print.min.js"></script>
+@endpush
 @push('scripts')
-    @include('js/datatables')
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('#tbl_list').DataTable({
+                dom: 'lBfrtip',
+                buttons: [
+                    'copy', 'excel', 'pdf', 'csv', 'print'
+                ],
+                processing: true,
+                serverSide: true,
+                responsive: true,
+                columnDefs: [{
+                    "defaultContent": "-",
+                    "targets": "_all"
+                }],
+                ajax: '{{ url()->current() }}',
+                columns: [
+                    { data: 'DT_RowIndex', name: 'DT_RowIndex', orderable: false, searchable: false },
+                    { data: 'nama_pelanggan', name: 'nama_pelanggan' },
+                    { data: 'total_bayar', name: 'total_bayar' },
+                    { data: 'alamat', name: 'alamat' },
+                    { data: 'pelanggan.no_hp', name: 'pelanggan.no_hp' },
+                    { data: 'action', name: 'action' },
+                ],
+            });
+        });
+    </script>
 @endpush
