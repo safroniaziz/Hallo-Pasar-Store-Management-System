@@ -21,7 +21,7 @@ return new class extends Migration
             $table->enum('status_point',['penambahan','pengurangan']);
             $table->timestamps();
 
-            $table->foreign('pelanggan_id')->references('id')->on('pelanggans');
+            $table->foreign('pelanggan_id')->references('id')->on('users');
             $table->foreign('transaksi_id')->references('id')->on('transaksis');
         });
     }

@@ -15,7 +15,7 @@ class TransaksiSeeder extends Seeder
      */
     public function run()
     {
-        for ($i=1; $i <=100000 ; $i++) {
+        for ($i=1; $i <=15 ; $i++) {
             DB::table('transaksis')->insert([
                 'pelanggan_id'    =>  1,
                 'metode_pembayaran_id'    =>  1,

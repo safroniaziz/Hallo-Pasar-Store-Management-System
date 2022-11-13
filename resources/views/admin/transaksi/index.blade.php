@@ -1,14 +1,17 @@
-@extends('layouts.layout')
-@section('mahasiswa_login')
-    <a style="color:#3c8dbc">{{ Session::get('nama_lengkap') }}</a>
+@extends('layouts.backend')
+@section('halaman')
+ Halaman Administrator
+@endsection
+@section('user-login')
+    <a style="color:#3c8dbc">{{ Auth::user()->nama_user }}</a>
 @endsection
 @push('styles')
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.20/css/dataTables.bootstrap4.min.css">
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/responsive/2.2.3/css/responsive.bootstrap4.min.css">
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/buttons/1.7.1/css/buttons.dataTables.min.css">
 @endpush
-@section('topbar')
-    @include('admin/topbar')
+@section('sidebar-menu')
+    @include('admin/sidebar')
 @endsection
 @section('content')
     <section class="content">

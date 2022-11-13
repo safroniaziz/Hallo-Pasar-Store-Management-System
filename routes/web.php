@@ -1,6 +1,8 @@
 <?php
 
 use App\Http\Controllers\Admin\AdminDashboardController;
+use App\Http\Controllers\Admin\AdministratorController;
+use App\Http\Controllers\Admin\DriverController;
 use App\Http\Controllers\Admin\KategoriProdukController;
 use App\Http\Controllers\Admin\KecamatanController;
 use App\Http\Controllers\Admin\KelurahanController;
@@ -8,6 +10,7 @@ use App\Http\Controllers\Admin\KotaController;
 use App\Http\Controllers\Admin\ProdukController;
 use App\Http\Controllers\FrontEndController;
 use App\Http\Controllers\Admin\MetodePembayaranController;
+use App\Http\Controllers\Admin\OperatorController;
 use App\Http\Controllers\Admin\TransaksiController;
 use App\Http\Controllers\Admin\PelangganController;
 use App\Http\Controllers\Admin\PelangganPointController;
@@ -121,6 +124,36 @@ Route::middleware('auth')->group(function() {
             Route::get('/cari_kecamatan',[TransaksiController::class, 'cariKecamatan']);
             Route::get('/cari_kelurahan',[TransaksiController::class, 'cariKelurahan']);
             Route::get('/cari_ongkir',[TransaksiController::class, 'cariOngkir']);
+        });
+
+        Route::prefix('manajemen_data_operator')->group(function() {
+            Route::get('/',[OperatorController::class, 'index'])->name('admin.operator');
+            Route::get('/create',[OperatorController::class, 'create'])->name('admin.operator.create');
+            Route::post('/post',[OperatorController::class, 'store'])->name('admin.operator.post');
+            Route::get('/{operator}/edit',[OperatorController::class, 'edit'])->name('admin.operator.edit');
+            Route::patch('/{operator}/update',[OperatorController::class, 'update'])->name('admin.operator.update');
+            Route::delete('{operator}/delete',[OperatorController::class, 'destroy'])->name('admin.operator.delete');
+            Route::get('{operator}/show',[OperatorController::class, 'show'])->name('admin.operator.show');
+        });
+
+        Route::prefix('manajemen_data_driver')->group(function() {
+            Route::get('/',[DriverController::class, 'index'])->name('admin.driver');
+            Route::get('/create',[DriverController::class, 'create'])->name('admin.driver.create');
+            Route::post('/post',[DriverController::class, 'store'])->name('admin.driver.post');
+            Route::get('/{driver}/edit',[DriverController::class, 'edit'])->name('admin.driver.edit');
+            Route::patch('/{driver}/update',[DriverController::class, 'update'])->name('admin.driver.update');
+            Route::delete('{driver}/delete',[DriverController::class, 'destroy'])->name('admin.driver.delete');
+            Route::get('{driver}/show',[DriverController::class, 'show'])->name('admin.driver.show');
+        });
+
+        Route::prefix('manajemen_data_administrator')->group(function() {
+            Route::get('/',[AdministratorController::class, 'index'])->name('admin.administrator');
+            Route::get('/create',[AdministratorController::class, 'create'])->name('admin.administrator.create');
+            Route::post('/post',[AdministratorController::class, 'store'])->name('admin.administrator.post');
+            Route::get('/{administrator}/edit',[AdministratorController::class, 'edit'])->name('admin.administrator.edit');
+            Route::patch('/{administrator}/update',[AdministratorController::class, 'update'])->name('admin.administrator.update');
+            Route::delete('{administrator}/delete',[AdministratorController::class, 'destroy'])->name('admin.administrator.delete');
+            Route::get('{administrator}/show',[AdministratorController::class, 'show'])->name('admin.administrator.show');
         });
     });
 });

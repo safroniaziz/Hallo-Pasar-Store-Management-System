@@ -1,13 +1,16 @@
-@extends('layouts.layout')
-@section('mahasiswa_login')
-    <a style="color:#3c8dbc">{{ Session::get('nama_lengkap') }}</a>
+@extends('layouts.backend')
+@section('halaman')
+ Halaman Administrator
+@endsection
+@section('user-login')
+    <a style="color:#3c8dbc">{{ Auth::user()->nama_user }}</a>
 @endsection
 @push('styles')
     @include('css/tambahan')
     @include('css/datatables')
 @endpush
-@section('topbar')
-    @include('admin/topbar')
+@section('sidebar-menu')
+    @include('admin/sidebar')
 @endsection
 @section('content')
     <section class="content">
@@ -39,7 +42,7 @@
                                 @foreach ($pelanggans as $index=> $pelanggan)
                                     <tr>
                                         <td>{{ $index+1 }}</td>
-                                        <td>{{ $pelanggan->nama_pelanggan }}</td>
+                                        <td>{{ $pelanggan->nama_user }}</td>
                                         <td>
                                             @if ($pelanggan->jenis_kelamin == "L")
                                                 <small class="text-muted text-primary"><i class="fa fa-male"></i>&nbsp; Laki-Laki</small>

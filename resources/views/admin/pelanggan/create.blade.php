@@ -1,14 +1,17 @@
-@extends('layouts.layout')
-@section('mahasiswa_login')
-    <a style="color:#3c8dbc">{{ Session::get('nama_lengkap') }}</a>
+@extends('layouts.backend')
+@section('halaman')
+ Halaman Administrator
+@endsection
+@section('user-login')
+    <a style="color:#3c8dbc">{{ Auth::user()->nama_user }}</a>
 @endsection
 @push('styles')
     @include('css/tambahan')
     @include('css/datatables')
     @include('css/icheck')
 @endpush
-@section('topbar')
-    @include('admin/topbar')
+@section('sidebar-menu')
+    @include('admin/sidebar')
 @endsection
 @section('content')
     <section class="content">
@@ -22,10 +25,20 @@
                         {{ csrf_field() }} {{ method_field('POST') }}
                         <div class="form-group col-md-6 ">
                             <label>Nama Pelanggan</label>
-                            <input type="text" name="nama_pelanggan" class="form-control">
+                            <input type="text" name="nama_user" class="form-control">
                             <div>
-                                @if ($errors->has('nama_pelanggan'))
-                                    <small class="form-text text-danger">{{ $errors->first('nama_pelanggan') }}</small>
+                                @if ($errors->has('nama_user'))
+                                    <small class="form-text text-danger">{{ $errors->first('nama_user') }}</small>
+                                @endif
+                            </div>
+                        </div>
+
+                        <div class="form-group col-md-6 ">
+                            <label>Email</label>
+                            <input type="email" name="email" class="form-control">
+                            <div>
+                                @if ($errors->has('email'))
+                                    <small class="form-text text-danger">{{ $errors->first('email') }}</small>
                                 @endif
                             </div>
                         </div>
@@ -53,10 +66,14 @@
                                 @endif
                             </div>
                         </div>
-
-                        <div class="form-group col-md-6 ">
-                            <label>Tanggal Lahir</label>
-                            <input type="date" name="tanggal_lahir" class="form-control">
+                        <div class="form-group col-md-6">
+                            <label for="">Tanggal Lahir</label>
+                             <div class="input-group date">
+                                <div class="input-group-addon">
+                                <i class="fa fa-calendar"></i>
+                                </div>
+                                <input type="text" name="tanggal_lahir" class="form-control pull-right date" autocomplete="off">
+                            </div>
                             <div>
                                 @if ($errors->has('tanggal_lahir'))
                                     <small class="form-text text-danger">{{ $errors->first('tanggal_lahir') }}</small>
@@ -65,41 +82,52 @@
                         </div>
 
                         <div class="form-group col-md-6 ">
-                            <label>Provinsi</label>
-                            <input type="text" name="provinsi" class="form-control">
+                            <label>Pilih Provinsi</label>
+                            <select name="provinsi_id" id="provinsi_id" class="form-control">
+                                <option disabled selected>-- pilih provinsi --</option>
+                                @foreach ($provinces as $provinsi)
+                                    <option value="{{ $provinsi->id }}">{{ $provinsi->name }}</option>
+                                @endforeach
+                            </select>
                             <div>
-                                @if ($errors->has('provinsi'))
-                                    <small class="form-text text-danger">{{ $errors->first('provinsi') }}</small>
+                                @if ($errors->has('provinsi_id'))
+                                    <small class="form-text text-danger">{{ $errors->first('provinsi_id') }}</small>
                                 @endif
                             </div>
                         </div>
 
                         <div class="form-group col-md-6 ">
-                            <label>Kabupaten/Kota</label>
-                            <input type="text" name="kab_kota" class="form-control">
+                            <label>Pilih Kota</label>
+                            <select name="kota_id" id="kota_id" class="form-control">
+                                <option disabled selected>-- pilih kota --</option>
+                            </select>
                             <div>
-                                @if ($errors->has('kab_kota'))
-                                    <small class="form-text text-danger">{{ $errors->first('kab_kota') }}</small>
+                                @if ($errors->has('kota_id'))
+                                    <small class="form-text text-danger">{{ $errors->first('kota_id') }}</small>
                                 @endif
                             </div>
                         </div>
-
+                        
                         <div class="form-group col-md-6 ">
-                            <label>Kecamatan</label>
-                            <input type="text" name="kecamatan" class="form-control">
+                            <label>Pilih Kecamatan</label>
+                            <select name="kecamatan_id" id="kecamatan_id" class="form-control">
+                                <option disabled selected>-- pilih kecamatan --</option>
+                            </select>
                             <div>
-                                @if ($errors->has('kecamatan'))
-                                    <small class="form-text text-danger">{{ $errors->first('kecamatan') }}</small>
+                                @if ($errors->has('kecamatan_id'))
+                                    <small class="form-text text-danger">{{ $errors->first('kecamatan_id') }}</small>
                                 @endif
                             </div>
                         </div>
-
+                        
                         <div class="form-group col-md-6 ">
-                            <label>Kelurahan</label>
-                            <input type="text" name="kelurahan" class="form-control">
+                            <label>Pilih Kelurahan</label>
+                            <select name="kelurahan_id" id="kelurahan_id" class="form-control">
+                                <option disabled selected>-- pilih kelurahan --</option>
+                            </select>
                             <div>
-                                @if ($errors->has('kelurahan'))
-                                    <small class="form-text text-danger">{{ $errors->first('kelurahan') }}</small>
+                                @if ($errors->has('kelurahan_id'))
+                                    <small class="form-text text-danger">{{ $errors->first('kelurahan_id') }}</small>
                                 @endif
                             </div>
                         </div>
@@ -114,6 +142,15 @@
                             </div>
                         </div>
 
+                        <div class="form-group col-md-6 ">
+                            <label>Password Login</label>
+                            <input type="password" name="password" class="form-control">
+                            <div>
+                                @if ($errors->has('password'))
+                                    <small class="form-text text-danger">{{ $errors->first('password') }}</small>
+                                @endif
+                            </div>
+                        </div>
 
                         <div class="form-group col-md-12 ">
                             <label>Alamat Lengkap</label>
@@ -140,4 +177,6 @@
 @push('scripts')
     @include('js/datatables')
     @include('js/icheck')
+    @include('js/datepicker')
+    @include('js/get_region')
 @endpush

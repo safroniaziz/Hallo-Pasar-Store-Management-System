@@ -1,12 +1,15 @@
-@extends('layouts.layout')
-@section('mahasiswa_login')
-    <a style="color:#3c8dbc">{{ Session::get('nama_lengkap') }}</a>
+@extends('layouts.backend')
+@section('halaman')
+ Halaman Administrator
+@endsection
+@section('user-login')
+    <a style="color:#3c8dbc">{{ Auth::user()->nama_user }}</a>
 @endsection
 @push('styles')
     @include('css/tambahan')
 @endpush
-@section('topbar')
-    @include('admin/topbar')
+@section('sidebar-menu')
+    @include('admin/sidebar')
 @endsection
 @section('content')
 <section class="content">

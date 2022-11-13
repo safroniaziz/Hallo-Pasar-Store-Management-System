@@ -1,14 +1,17 @@
-@extends('layouts.layout')
-@section('mahasiswa_login')
-    <a style="color:#3c8dbc">{{ Session::get('nama_lengkap') }}</a>
+@extends('layouts.backend')
+@section('halaman')
+ Halaman Administrator
+@endsection
+@section('user-login')
+    <a style="color:#3c8dbc">{{ Auth::user()->nama_user }}</a>
 @endsection
 @push('styles')
     @include('css/tambahan')
     @include('css/datatables')
     @include('css/icheck')
 @endpush
-@section('topbar')
-    @include('admin/topbar')
+@section('sidebar-menu')
+    @include('admin/sidebar')
 @endsection
 @section('content')
     <section class="content">
@@ -25,7 +28,9 @@
                             <select name="pelanggan_id" class="form-control" id="">
                                 <option disabled selected>-- pilih pelanggan --</option>
                                 @foreach ($pelanggans as $pelanggan)
-                                    <option value="{{ $pelanggan->id }}">{{ $pelanggan->nama_pelanggan }}</option>
+                                    <option value="{{ $pelanggan->id }}" @if ($pelanggan->id == $transaksi->pelanggan_id)
+                                        selected
+                                    @endif>{{ $pelanggan->nama_pelanggan }}</option>
                                 @endforeach
                             </select>
                             <div>
@@ -40,7 +45,9 @@
                             <select name="metode_pembayaran_id" class="form-control" id="">
                                 <option disabled selected>-- pilih metode --</option>
                                 @foreach ($metodes as $metode)
-                                    <option value="{{ $metode->id }}">{{ $metode->nama_metode }}</option>
+                                    <option value="{{ $metode->id }}" @if ($metode->id == $transaksi->metode_pembayaran_id)
+                                        selected
+                                    @endif>{{ $metode->nama_metode }}</option>
                                 @endforeach
                             </select>
                             <div>
@@ -52,7 +59,7 @@
 
                         <div class="form-group col-md-6 ">
                             <label>Total Belanja <small class="text-muted text-danger">(Rupiah)</small></label>
-                            <input type="number" name="total_belanja" class="form-control">
+                            <input type="number" name="total_belanja" value="{{ $transaksi->total_belanja }}" class="form-control">
                             <div>
                                 @if ($errors->has('total_belanja'))
                                     <small class="form-text text-danger">{{ $errors->first('total_belanja') }}</small>
@@ -110,10 +117,10 @@
                                 @endif
                             </div>
                         </div>
-                        {{ $errors }}
+
                         <div class="form-group col-md-6 ">
                             <label>Ongkos Kirim <small class="text-muted text-danger">(Rupiah)</small></label>
-                            <input type="number" name="ongkir" id="ongkir" class="form-control" readonly>
+                            <input type="number" name="ongkir" value="{{ $transaksi->ongkir }}" id="ongkir" class="form-control" readonly>
                             <div>
                                 @if ($errors->has('ongkir'))
                                     <small class="form-text text-danger">{{ $errors->first('ongkir') }}</small>
@@ -123,7 +130,7 @@
 
                         <div class="form-group col-md-6 ">
                             <label>Biaya Tambahan <small class="text-muted text-danger">(Rupiah)</small></label>
-                            <input type="number" name="tambahan" class="form-control">
+                            <input type="number" name="tambahan" value="{{ $transaksi->tambahan }}" class="form-control">
                             <div>
                                 @if ($errors->has('tambahan'))
                                     <small class="form-text text-danger">{{ $errors->first('tambahan') }}</small>
@@ -136,7 +143,9 @@
                             <select name="driver_id" class="form-control" id="">
                                 <option disabled selected>-- pilih driver --</option>
                                 @foreach ($drivers as $driver)
-                                    <option value="{{ $driver->id }}">{{ $driver->nama_user }}</option>
+                                    <option value="{{ $driver->id }}" @if ($driver->id == $transaksi->driver_id)
+                                        selected
+                                    @endif>{{ $driver->nama_user }}</option>
                                 @endforeach
                             </select>
                             <div>

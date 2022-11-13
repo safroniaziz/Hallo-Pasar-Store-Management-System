@@ -14,6 +14,7 @@ class Pelanggan extends Model
         'jenis_kelamin',
         'pekerjaan',
         'tanggal_lahir',
+        'village_id',
         'provinsi',
         'kab_kota',
         'kecamatan',
@@ -21,16 +22,4 @@ class Pelanggan extends Model
         'alamat',
         'no_hp'
     ];
-
-    public function transaksis(){
-        return $this->hasMany(Transaksi::class);
-    }
-
-    public function pelanggan_points(){
-        return $this->hasMany(PelangganPoint::class);
-    }
-
-    public function getPelangganPointAttribute(){
-        return $this->pelanggan_points()->sum('point');
-    }
 }

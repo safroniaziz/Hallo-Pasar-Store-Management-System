@@ -84,7 +84,7 @@ class TransaksiController extends Controller
             'metode_pembayaran_id'  =>  'Metode Pembayaran',
             'kelurahan_id'          =>  'Kelurahan',
             'alamat'                =>  'Alamat',
-            'total_belanja'                 =>  'Total Belanja',
+            'total_belanja'         =>  'Total Belanja',
             'ongkir'                =>  'Ongkos Kirim',
             'tambahan'              =>  'Biaya Tambahan',
             'driver_id'             =>  'Nama Driver',
@@ -94,7 +94,7 @@ class TransaksiController extends Controller
             'metode_pembayaran_id'  =>  'required',
             'kelurahan_id'          =>  'required',
             'alamat'                =>  'required',
-            'total_belanja'                 =>  'required',
+            'total_belanja'         =>  'required',
             'ongkir'                =>  'required',
             'tambahan'              =>  'required',
             'driver_id'             =>  'required',
@@ -148,7 +148,7 @@ class TransaksiController extends Controller
         $metodes = MetodePembayaran::all();
         $pelanggans = Pelanggan::all();
         $provinces = Province::all();
-        return view('admin.transaksi.create',[
+        return view('admin.transaksi.edit',[
             'drivers' =>    $drivers,
             'metodes' =>    $metodes,
             'pelanggans' =>    $pelanggans,
@@ -171,18 +171,42 @@ class TransaksiController extends Controller
             'required' => ':attribute harus diisi',
         ];
         $attributes = [
-            'nama_metode'       =>  'Nama transaksi',
-            'keterangan'        =>  'Keterangan',
+            'pelanggan_id'          =>  'Nama Pelanggan',
+            'metode_pembayaran_id'  =>  'Metode Pembayaran',
+            'kelurahan_id'          =>  'Kelurahan',
+            'alamat'                =>  'Alamat',
+            'total_belanja'         =>  'Total Belanja',
+            'ongkir'                =>  'Ongkos Kirim',
+            'tambahan'              =>  'Biaya Tambahan',
+            'driver_id'             =>  'Nama Driver',
         ];
         $this->validate($request,[
-            'nama_metode' =>  'required',
-            'keterangan' =>  'required',
+            'pelanggan_id'          =>  'required',
+            'metode_pembayaran_id'  =>  'required',
+            'kelurahan_id'          =>  'required',
+            'alamat'                =>  'required',
+            'total_belanja'         =>  'required',
+            'ongkir'                =>  'required',
+            'tambahan'              =>  'required',
+            'driver_id'             =>  'required',
         ],$messages,$attributes);
 
-        $transaksi->update([
-            'nama_metode'       =>  $request->nama_metode,
-            'nomoe_rekening'    =>  $request->nomoe_rekening,
-            'keterangan'        =>  $request->keterangan,
+        $pelanggan =  Pelanggan::where('id',$request->pelanggan_id)->first();
+        $kelurahan =  Village::where('id',$request->kelurahan_id)->first();
+        $total_bayar = $request->total_belanja + $request->ongkir + $request->tambahan;
+        $driver = User::where('id',$request->driver_id)->select('nama_user')->first();
+        $transaksi::create([
+            'pelanggan_id'          =>  $request->pelanggan_id,
+            'nama_pelanggan'        =>  $pelanggan->nama_pelanggan,
+            'metode_pembayaran_id'  =>  $request->metode_pembayaran_id,
+            'kelurahan'             =>  $kelurahan->name,
+            'alamat'                =>  $request->alamat,
+            'total_belanja'         =>  $request->total_belanja,
+            'ongkir'                =>  $request->ongkir,
+            'tambahan'              =>  $request->tambahan,
+            'driver_id'             =>  $request->driver_id,
+            'total_bayar'           =>  $total_bayar,
+            'nama_driver'           =>  $driver->nama_user,
         ]);
 
         $notification = array(

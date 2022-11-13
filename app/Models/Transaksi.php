@@ -23,7 +23,11 @@ class Transaksi extends Model
     ];
 
     public function pelanggan(){
-        return $this->belongsTo(Pelanggan::class);
+        return $this->belongsTo(User::class,'id');
+    }
+
+    public function driver(){
+        return $this->belongsTo(User::class,'id');
     }
 
     public function metode_pembayaran(){
