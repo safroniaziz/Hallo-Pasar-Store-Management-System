@@ -36,6 +36,7 @@
                                     <th>Biaya Tambahan</th>
                                     <th>Total Harga</th>
                                     <th>Paketan Sayur</th>
+                                    <th>Kandungan Gizi</th>
                                     <th>Aksi</th>
                                 </tr>
                             </thead>
@@ -70,6 +71,9 @@
                                             @else
                                                 <small class="text-muted text-danger">Tidak</small>
                                             @endif
+                                        </td>
+                                        <td>
+                                            <a href="{{ route('admin.gizi_produk',[$produk->id]) }}" class="btn btn-success btn-sm btn-flat">{{ $produk->tags()->count() }}</a>
                                         </td>
                                         <td>
                                             <table>

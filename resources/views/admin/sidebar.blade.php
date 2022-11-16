@@ -5,7 +5,7 @@
     </a>
 </li>
 
-<li class="treeview {{ set_active(['admin.kategori_produk','admin.kategori_produk.create','admin.kategori_produk.edit','admin.produk','admin.produk.edit','admin.produk.create']) }}">
+<li class="treeview {{ set_active(['admin.kategori_produk','admin.kategori_produk.create','admin.kategori_produk.edit','admin.produk','admin.produk.edit','admin.produk.create','admin.tag','admin.tag.edit','admin.tag.create']) }}">
     <a href="#">
         <i class="fa fa-shopping-cart"></i> <span>Manajemen Produk</span>
         <span class="pull-right-container">
@@ -13,8 +13,9 @@
         </span>
     </a>
     <ul class="treeview-menu " style="padding-left:25px;">
-        <li class="{{ set_active('admin.kategori_produk') }}"><a href="{{ route('admin.kategori_produk') }}"><i class="fa fa-laptop"></i>Kategori Produk</a></li>
-        <li class="{{ set_active('admin.produk') }}"><a href="{{ route('admin.produk') }}"><i class="fa fa-television"></i>Produk</a></li>
+        <li class="{{ set_active(['admin.tag','admin.tag.create','admin.tag.edit']) }}"><a href="{{ route('admin.tag') }}"><i class="fa fa-laptop"></i>Kandungan Gizi</a></li>
+        <li class="{{ set_active(['admin.kategori_produk','admin.kategori_produk.create','admin.kategori_produk.edit']) }}"><a href="{{ route('admin.kategori_produk') }}"><i class="fa fa-laptop"></i>Kategori Produk</a></li>
+        <li class="{{ set_active(['admin.produk','admin.produk.create','admin.produk.edit']) }}"><a href="{{ route('admin.produk') }}"><i class="fa fa-television"></i>Produk</a></li>
     </ul>
 </li>
 

@@ -6,15 +6,15 @@
       <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
       <meta name="description" content="">
       <meta name="author" content="">
-      <link rel="icon" type="image/png" href="{{ asset('assets/images/logo.png') }}">
-      <title>HalloPasar - Pemesanan Kebutuhan Dapur Online</title>
+      <link rel="icon" type="image/png" href="img/logo.svg">
+      <title>Grofarweb - Online Grocery Supermarket HTML Template</title>
       @include('css/frontend')
    </head>
    <body class="fixed-bottom-padding">
       <div class="border-bottom p-3 d-none mobile-nav">
          <div class="title d-flex align-items-center">
-            <a href="{{ route('home') }}" class="text-decoration-none text-dark d-flex align-items-center">
-               <img class="osahan-logo mr-2" src="{{ asset('assets/images/logo.png') }}">
+            <a href="home.html" class="text-decoration-none text-dark d-flex align-items-center">
+               <img class="osahan-logo mr-2" src="img/logo.svg">
                <h4 class="font-weight-bold text-success m-0">Grocery</h4>
             </a>
             <p class="ml-auto m-0">
@@ -34,8 +34,6 @@
             </div>
          </a>
       </div>
-
-      <!-- Dark mode -->
       <div class="theme-switch-wrapper">
          <label class="theme-switch" for="checkbox">
             <input type="checkbox" id="checkbox" />
@@ -44,7 +42,6 @@
          </label>
          <em>Enable Dark Mode!</em>
       </div>
-      <!-- End Dark mode -->
       <!-- Nav bar -->
       <div class="bg-white shadow-sm osahan-main-nav">
          <nav class="navbar navbar-expand-lg navbar-light bg-white osahan-header py-0 container" style="padding:10px 0px 10px 0px !important">
@@ -92,51 +89,108 @@
          </nav>
          <!-- Menu bar -->
          <div class="bg-color-head">
-            @yield('menu')
+            @include('frontend/menu')
          </div>
       </div>
       <!-- bread_cum -->
-      <nav aria-label="breadcrumb" class="breadcrumb mb-0 d-none">
+      <nav aria-label="breadcrumb" class="breadcrumb mb-0">
          <div class="container">
             <ol class="d-flex align-items-center mb-0 p-0">
                <li class="breadcrumb-item"><a href="#" class="text-success">Home</a></li>
-               <li class="breadcrumb-item active" aria-current="page"></li>
+               <li class="breadcrumb-item active" aria-current="page">Detail Produk</li>
             </ol>
          </div>
       </nav>
+      <!-- body -->
       <section class="py-4 osahan-main-body">
          <div class="container">
             <div class="row">
-               <div class="col-lg-12">
-                  <!-- home page -->
-                  <div class="osahan-home-page">
-                     <!-- body -->
-                     <div class="osahan-body">
-                        <!-- categories -->
-                        @yield('category')
-                        <!-- Promos -->
-                        @yield('paketan')
-                        <!-- Pick's Today -->
-                        <div class="title d-flex align-items-center py-3">
-                           <h5 class="m-0">Pesan Sekarang Juga</h5>
-                           <a class="ml-auto btn btn-outline-success btn-sm" href="{{ route('produks') }}">Lihat Semua Produk</a>
+               <div class="col-lg-6">
+                  <div class="recommend-slider mb-3">
+                     @if ($produk->photos()->get()->count() >0)
+                         @foreach ($produk->photos()->get() as $foto)
+                            <div class="osahan-slider-item">
+                                <img src="{{ asset('upload/foto_produk_detail/'.$foto->foto_produk) }}" class="img-fluid mx-auto shadow-sm rounded" alt="Responsive image">
+                            </div>
+                         @endforeach
+                        @else
+                        <div class="osahan-slider-item">
+                            <img src="{{ asset('upload/foto_produk/'.$produk->foto_produk) }}" class="img-fluid mx-auto shadow-sm rounded" alt="Responsive image">
                         </div>
-                        <!-- pick today -->
-                        @yield('produks')
-                        <!-- Most sales -->
-                        <div class="title d-flex align-items-center py-3">
-                           <h5 class="m-0">Rekomendasi Paket Sayuran & Daging</h5>
-                           <a class="ml-auto btn btn-outline-success btn-sm" href="recommend.html">26 more</a>
+                     @endif
+                  </div>
+                  <div class="pd-f d-flex align-items-center mb-3">
+                  </div>
+               </div>
+               <div class="col-lg-6">
+                  <div class="p-4 bg-white rounded shadow-sm">
+                     <div class="pt-0">
+                        <h2 class="font-weight-bold">{{ $produk->nama_produk }}</h2>
+                        <p class="font-weight-light text-dark m-0 d-flex align-items-center">
+                           Harga Per {{ $produk->satuan }} : <b class="h6 text-dark m-0">Rp.{{ number_format($produk->harga) }}</b>
+                           <span class="badge badge-danger ml-2">Potongan Sebesar Rp.{{ number_format($produk->diskon) }}</span>
+                        </p>
+                        {{-- <a href="review.html">
+                           <div class="rating-wrap d-flex align-items-center mt-2">
+                              <ul class="rating-stars list-unstyled">
+                                 <li>
+                                    <i class="icofont-star text-warning"></i>
+                                    <i class="icofont-star text-warning"></i>
+                                    <i class="icofont-star text-warning"></i>
+                                    <i class="icofont-star text-warning"></i>
+                                    <i class="icofont-star"></i>
+                                 </li>
+                              </ul>
+                              <p class="label-rating text-muted ml-2 small"> (245 Reviews)</p>
+                           </div>
+                        </a> --}}
+                     </div>
+                     <div class="pt-2">
+                        <div class="row">
+                           <div class="col-6">
+                              <p class="font-weight-bold m-0">Biaya Pengantaran</p>
+                              <p class="text-muted m-0">
+                                @if (Auth::check())
+                                    Rp.{{ number_format(Auth::user()->village->ongkir) }}
+                                @else
+                                    <a href="" data-toggle="modal" data-target="#login"><i class="fa fa-sign-in"></i>Login untuk cek ongkir</a>
+                                @endif
+                              </p>
+                           </div>
+                           <div class="col-6 text-right">
+                              <p class="font-weight-bold m-0">Waktu Pengantaran:</p>
+                              <p class="text-muted m-0">
+                                Setiap Hari
+                              </p>
+                           </div>
                         </div>
-                        <!-- osahan recommend -->
-                        @yield('rekomendasi')
+                     </div>
+                     <div class="details">
+                        <div class="pt-3">
+                            <p class="font-weight-bold mb-2">Deskripsi Produk</p>
+                            <p class="text-muted small mb-0">
+                             {{ $produk->deskripsi }}
+                             </p>
+                         </div>
+                        <div class="pt-3 bg-white">
+                              <a class="ml-auto" href="#">
+                                 <form id='myform' class="cart-items-number d-flex" method='POST' action='#'>
+                                    <input type='button' value='-' class='qtyminus btn btn-success btn-sm' field='quantity' />
+                                    <input type='text' name='quantity' value='1' class='qty form-control' />
+                                    <input type='button' value='+' class='qtyplus btn btn-success btn-sm' field='quantity' />
+                                 </form>
+                              </a>
+                            <a href="cart.html" class="btn btn-success p-2 mt-2 rounded d-flex align-items-center justify-content-center btn-sm "><i class="icofont-cart m-0 mr-2"></i> Tambah Keranjang</a>
+                        </div>
+                        
                      </div>
                   </div>
                </div>
             </div>
+            <h5 class="mt-3 mb-3">Paketan Hemat Tanpa Repot</h5>
+                @include('frontend/_produks')
          </div>
       </section>
-
       @include('frontend/_menu_android')
      <!-- footer -->
      <footer class="section-footer border-top bg-white">
@@ -159,6 +213,6 @@
            <!-- //container -->
         </section>
      </footer>
-     @include('js/frontend')
+      @include('js/frontend')
    </body>
 </html>

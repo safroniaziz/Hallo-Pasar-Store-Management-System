@@ -34,4 +34,9 @@ class Produk extends Model
     public function photos(){
         return $this->hasMany(FotoProduk::class);
     }
+
+    public function tags()
+    {
+        return $this->belongsToMany(Tag::class, 'produk_tag');
+    }
 }

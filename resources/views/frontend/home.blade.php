@@ -8,10 +8,6 @@
     @include('frontend/_category')
 @endsection
 
-@section('paketan')
-    @include('frontend/_paketan')
-@endsection
-
 @section('produks')
     @include('frontend/_produks')
 @endsection

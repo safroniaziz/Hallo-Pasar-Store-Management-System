@@ -66,4 +66,8 @@ class User extends Authenticatable
     public function getPelangganPointAttribute(){
         return $this->pelanggan_points()->sum('point');
     }
+
+    public function village(){
+        return $this->belongsTo(Village::class);
+    }
 }

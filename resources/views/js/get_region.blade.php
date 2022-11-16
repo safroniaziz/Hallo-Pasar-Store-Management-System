@@ -7,7 +7,7 @@
         var op=" ";
         $.ajax({
         type :'get',
-        url: "{{ url('admin/transaksi/cari_kota') }}",
+        url: "{{ url('cari_kota') }}",
         data:{'provinsi_id':provinsi_id},
             success:function(data){
                 // alert(data[i].id);
@@ -33,7 +33,7 @@
         var op=" ";
         $.ajax({
         type :'get',
-        url: "{{ url('admin/transaksi/cari_kecamatan') }}",
+        url: "{{ url('cari_kecamatan') }}",
         data:{'kota_id':kota_id},
             success:function(data){
                 // alert(data[i].id);
@@ -59,7 +59,7 @@
         var op=" ";
         $.ajax({
         type :'get',
-        url: "{{ url('admin/transaksi/cari_kelurahan') }}",
+        url: "{{ url('cari_kelurahan') }}",
         data:{'kecamatan_id':kecamatan_id},
             success:function(data){
                 // alert(data[i].id);
@@ -81,7 +81,7 @@
         var kelurahan_id = $(this).val();
         $.ajax({
         type :'get',
-        url: "{{ url('admin/transaksi/cari_ongkir') }}",
+        url: "{{ url('cari_ongkir') }}",
         data:{'kelurahan_id':kelurahan_id},
             success:function(data){
                 $('#ongkir').val(data.ongkir);

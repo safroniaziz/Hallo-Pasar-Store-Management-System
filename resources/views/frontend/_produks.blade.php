@@ -1,14 +1,17 @@
+@include('css/tambahan')
 <div class="pick_today">
     <div class="row">
          @foreach ($produks as $produk)
              <div class="col-6 col-md-3 mb-3">
                  <div class="list-card bg-white h-100 rounded overflow-hidden position-relative shadow-sm">
                  <div class="list-card-image">
-                     <a href="product_details.html" class="text-dark">
-                         <div class="member-plan position-absolute"><span class="badge m-3 badge-danger">{{ $produk->kategori->nama_kategori }}</span></div>
+                     <a href="{{ route('produk.detail',[$produk->id]) }}" class="text-dark">
+                         <div class="member-plan position-absolute"><span class="badge m-3 badge-danger"><i class="fa fa-tag fa-lg"></i>&nbsp;Rp.{{ $produk->diskon }}</span></div>
                          <div class="p-3">
                              <img src="{{ asset('upload/foto_produk/'.$produk->foto_produk) }}" class="img-fluid item-img w-100 mb-3" style="max-height: 120px !important; min-height:120px !important">
                              <h6>{{ $produk->nama_produk }}</h6>
+                            <p class="text-muted">{{ $produk->kategori->nama_kategori }}</p>
+
                              <div class="d-flex align-items-center">
                              <h6 class="price m-0 text-success">{{ ($produk->harga + $produk->tambahan)-$produk->diskon }}/{{ $produk->satuan }}</h6>
                      <a data-toggle="collapse" href="#collapseExample1" role="button" aria-expanded="false" aria-controls="collapseExample1" class="btn btn-success btn-sm ml-auto">+</a>

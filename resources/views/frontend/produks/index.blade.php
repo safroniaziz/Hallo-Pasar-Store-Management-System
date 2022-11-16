@@ -6,15 +6,18 @@
       <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
       <meta name="description" content="">
       <meta name="author" content="">
-      <link rel="icon" type="image/png" href="{{ asset('assets/images/logo.png') }}">
-      <title>HalloPasar - Pemesanan Kebutuhan Dapur Online</title>
+      <link rel="icon" type="image/png" href="img/logo.svg">
+      <title>Grofarweb - Online Grocery Supermarket HTML Template</title>
+      <!-- Slick Slider -->
       @include('css/frontend')
+
+      @include('css/tambahan')
    </head>
    <body class="fixed-bottom-padding">
       <div class="border-bottom p-3 d-none mobile-nav">
          <div class="title d-flex align-items-center">
-            <a href="{{ route('home') }}" class="text-decoration-none text-dark d-flex align-items-center">
-               <img class="osahan-logo mr-2" src="{{ asset('assets/images/logo.png') }}">
+            <a href="home.html" class="text-decoration-none text-dark d-flex align-items-center">
+               <img class="osahan-logo mr-2" src="img/logo.svg">
                <h4 class="font-weight-bold text-success m-0">Grocery</h4>
             </a>
             <p class="ml-auto m-0">
@@ -34,8 +37,6 @@
             </div>
          </a>
       </div>
-
-      <!-- Dark mode -->
       <div class="theme-switch-wrapper">
          <label class="theme-switch" for="checkbox">
             <input type="checkbox" id="checkbox" />
@@ -44,10 +45,9 @@
          </label>
          <em>Enable Dark Mode!</em>
       </div>
-      <!-- End Dark mode -->
       <!-- Nav bar -->
       <div class="bg-white shadow-sm osahan-main-nav">
-         <nav class="navbar navbar-expand-lg navbar-light bg-white osahan-header py-0 container" style="padding:10px 0px 10px 0px !important">
+        <nav class="navbar navbar-expand-lg navbar-light bg-white osahan-header py-0 container" style="padding:10px 0px 10px 0px !important">
             <a class="navbar-brand mr-0" href="{{ route('home') }}"><img class="img-fluid logo-img rounded-pill border shadow-sm" src="{{ asset('assets/images/logo.png') }}"></a>
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
@@ -92,51 +92,73 @@
          </nav>
          <!-- Menu bar -->
          <div class="bg-color-head">
-            @yield('menu')
+            @include('frontend/menu')
          </div>
       </div>
       <!-- bread_cum -->
-      <nav aria-label="breadcrumb" class="breadcrumb mb-0 d-none">
+      <nav aria-label="breadcrumb" class="breadcrumb mb-0">
          <div class="container">
             <ol class="d-flex align-items-center mb-0 p-0">
                <li class="breadcrumb-item"><a href="#" class="text-success">Home</a></li>
-               <li class="breadcrumb-item active" aria-current="page"></li>
+               <li class="breadcrumb-item active" aria-current="page">Listing</li>
             </ol>
          </div>
       </nav>
+      <!-- body -->
       <section class="py-4 osahan-main-body">
          <div class="container">
             <div class="row">
                <div class="col-lg-12">
-                  <!-- home page -->
-                  <div class="osahan-home-page">
-                     <!-- body -->
-                     <div class="osahan-body">
-                        <!-- categories -->
-                        @yield('category')
-                        <!-- Promos -->
-                        @yield('paketan')
-                        <!-- Pick's Today -->
-                        <div class="title d-flex align-items-center py-3">
-                           <h5 class="m-0">Pesan Sekarang Juga</h5>
-                           <a class="ml-auto btn btn-outline-success btn-sm" href="{{ route('produks') }}">Lihat Semua Produk</a>
+                  <div class="osahan-listing">
+                     <div class="d-flex align-items-center mb-3">
+                        <h4>Pesan sekarang</h4>
+                        <div class="m-0 text-center ml-auto">
+                           {{-- <a href="#" data-toggle="modal" data-target="#exampleModal" class="btn text-muted bg-white mr-2"><i class="icofont-filter mr-1"></i> Filter</a>
+                           <a href="#" data-toggle="modal" data-target="#exampleModal" class="btn text-muted bg-white"><i class="icofont-signal mr-1"></i> Sort</a> --}}
                         </div>
-                        <!-- pick today -->
-                        @yield('produks')
-                        <!-- Most sales -->
-                        <div class="title d-flex align-items-center py-3">
-                           <h5 class="m-0">Rekomendasi Paket Sayuran & Daging</h5>
-                           <a class="ml-auto btn btn-outline-success btn-sm" href="recommend.html">26 more</a>
+                     </div>
+                     <div class="row">
+                        @foreach ($produks as $produk)
+                            <div class="col-6 col-md-3 mb-3">
+                                <div class="list-card bg-white h-100 rounded overflow-hidden position-relative shadow-sm">
+                                    <div class="list-card-image">
+                                        <a href="{{ route('produk.detail',[$produk->id]) }}" class="text-dark">
+                                            <div class="member-plan position-absolute"><span class="badge m-3 badge-danger"><i class="fa fa-tag fa-lg"></i>&nbsp;Rp.{{ $produk->diskon }}</span></div>
+                                                <div class="p-3">
+                                                    <img src="{{ asset('upload/foto_produk/'.$produk->foto_produk) }}" class="img-fluid item-img w-100 mb-3" style="max-height: 120px !important; min-height:120px !important">
+                                                    <h6>{{ $produk->nama_produk }}</h6>
+                                                <p class="text-muted">{{ $produk->kategori->nama_kategori }}</p>
+                    
+                                                    <div class="d-flex align-items-center">
+                                                    <h6 class="price m-0 text-success">{{ ($produk->harga + $produk->tambahan)-$produk->diskon }}/{{ $produk->satuan }}</h6>
+                                            <a data-toggle="collapse" href="#collapseExample1" role="button" aria-expanded="false" aria-controls="collapseExample1" class="btn btn-success btn-sm ml-auto">+</a>
+                                            <div class="collapse qty_show" id="collapseExample1">
+                                            <div>
+                                            <span class="ml-auto" href="#">
+                                            <form id='myform' class="cart-items-number d-flex" method='POST' action='#'>
+                                            <input type='button' value='-' class='qtyminus btn btn-success btn-sm' field='quantity' />
+                                            <input type='text' name='quantity' value='1' class='qty form-control' />
+                                            <input type='button' value='+' class='qtyplus btn btn-success btn-sm' field='quantity' />
+                                            </form>
+                                            </span>
+                                            </div>
+                                            </div>
+                                            </div>
+                                            </div>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        @endforeach
+                        <div class="col-md-12">
+                            {{$produks->links("pagination::bootstrap-4") }}
                         </div>
-                        <!-- osahan recommend -->
-                        @yield('rekomendasi')
                      </div>
                   </div>
                </div>
             </div>
          </div>
       </section>
-
       @include('frontend/_menu_android')
      <!-- footer -->
      <footer class="section-footer border-top bg-white">

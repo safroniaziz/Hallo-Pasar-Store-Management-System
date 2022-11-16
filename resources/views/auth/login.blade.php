@@ -1,81 +1,121 @@
+
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Laboratorium BDP UNIB</title>
-    <link rel="shortcut icon" href="{{ asset('assets/images/logo.png') }}">
-    <link rel="stylesheet" href="{{ asset('assets/login/css/style.css') }}" />
-    <link rel="stylesheet" href="{{ asset('assets/login/css/bootstrap.min.css') }}" />
-    <link rel="stylesheet" href="{{ asset('assets/vendors/font-awesome/css/font-awesome.min.css') }}" />
-    <style>
-        .preloader {    position: fixed;    top: 0;    left: 0;    right: 0;    bottom: 0;    background-color: #ffffff;    z-index: 99999;    height: 100%;    width: 100%;    overflow: hidden !important;}.do-loader{    width: 200px;    height: 200px;    position: absolute;    left: 50%;    top: 50%;    margin: 0 auto;    -webkit-border-radius: 100%;       -moz-border-radius: 100%;         -o-border-radius: 100%;            border-radius: 100%;    background-image: url({{ asset('assets/images/logo.png') }});    background-size: 80% !important;    background-repeat: no-repeat;    background-position: center;    -webkit-background-size: cover;            background-size: cover;    -webkit-transform: translate(-50%,-50%);       -moz-transform: translate(-50%,-50%);        -ms-transform: translate(-50%,-50%);         -o-transform: translate(-50%,-50%);            transform: translate(-50%,-50%);}.do-loader:before {    content: "";    display: block;    position: absolute;    left: -6px;    top: -6px;    height: calc(100% + 12px);    width: calc(100% + 12px);    border-top: 1px solid #07A8D8;    border-left: 1px solid transparent;    border-bottom: 1px solid transparent;    border-right: 1px solid transparent;    border-radius: 100%;    -webkit-animation: spinning 0.750s infinite linear;       -moz-animation: spinning 0.750s infinite linear;         -o-animation: spinning 0.750s infinite linear;            animation: spinning 0.750s infinite linear;}@-webkit-keyframes spinning {   from {-webkit-transform: rotate(0deg);}   to {-webkit-transform: rotate(359deg);}}@-moz-keyframes spinning {   from {-moz-transform: rotate(0deg);}   to {-moz-transform: rotate(359deg);}}@-o-keyframes spinning {   from {-o-transform: rotate(0deg);}   to {-o-transform: rotate(359deg);}}@keyframes spinning {   from {transform: rotate(0deg);}   to {transform: rotate(359deg);}}
-    </style>
-</head>
-
-<body>
-    <div class="preloader">
-        <div class="do-loader"></div>
-    </div>
-    <div class="d-flex align-items-center " style="height: 100vh">
-        <div class="container">
-            <div class="row">
-                <div class="col-12 col-md-6 p-5 p-md-0">
-                    <img src="{{ asset('assets/images/logo2.png') }}" height="100">
-                    <div class="mb-4">
-                        <h2 style="color:white">Login Sebagai Administrator <br> Masukan Username dan Password Terdaftar</h2>
-                    </div>
-                    @if ($message = Session::get('success'))
-                        <div class="alert alert-success alert-block">
-                            {{ $message }}
-                        </div>
-                        @elseif ($message = Session::get('error'))
-                            <div class="alert alert-danger alert-block">
-                                {{ $message }}
-                            </div>
-                    @endif
-                    <form method="POST" action="{{ route('login') }}">
-                        @csrf
-                        <div class="form-group">
-                            <label for="email" style="color:white">Email</label>
-                            <input type="email" name="email" class="form-control @error('email') is-invalid @enderror"
-                                id="email" placeholder="email" value="{{ old('email') }}" autocomplete="email"
-                                autofocus />
-                            <div>
-                                @if ($errors->has('email'))
-                                    <small class="form-text text-danger">{{ $errors->first('email') }}</small>
-                                @endif
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label for="password" style="color:white">Password</label>
-                            <input type="password" name="password"
-                                class="form-control @error('password') is-invalid @enderror" id="password"
-                                placeholder="password" autocomplete="current-password" />
-                            <div>
-                                @if ($errors->has('password'))
-                                    <small class="form-text text-danger">{{ $errors->first('password') }}</small>
-                                @endif
-                            </div>
-                        </div>
-                        <button type="submit" class="btn btn-primary mt-2">
-                            <i class="fa fa-sign-in"></i>&nbsp;Login
-                        </button>
-                    </form>
-                </div>
+   <head>
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+      <meta name="description" content="">
+      <meta name="author" content="">
+      <link rel="icon" type="image/png" href="img/logo.svg">
+      <title>Grofarweb - Online Grocery Supermarket HTML Template</title>
+      @include('css/frontend')
+   </head>
+   <body class="fixed-bottom-padding">
+      <div class="border-bottom p-3 d-none mobile-nav">
+         <div class="title d-flex align-items-center">
+            <a href="home.html" class="text-decoration-none text-dark d-flex align-items-center">
+               <img class="osahan-logo mr-2" src="img/logo.svg">
+               <h4 class="font-weight-bold text-success m-0">Grocery</h4>
+            </a>
+            <p class="ml-auto m-0">
+               <a href="listing.html" class="text-decoration-none bg-white p-1 rounded shadow-sm d-flex align-items-center">
+               <i class="text-dark icofont-sale-discount"></i>
+               <span class="badge badge-danger p-1 ml-1 small">50%</span>
+               </a>
+            </p>
+            <a class="toggle ml-3" href="#"><i class="icofont-navigation-menu"></i></a>
+         </div>
+         <a href="search.html" class="text-decoration-none">
+            <div class="input-group mt-3 rounded shadow-sm overflow-hidden bg-white">
+               <div class="input-group-prepend">
+                  <button class="border-0 btn btn-outline-secondary text-success bg-white"><i class="icofont-search"></i></button>
+               </div>
+               <input type="text" class="shadow-none border-0 form-control pl-0" placeholder="Search for Products.." aria-label="" aria-describedby="basic-addon1">
             </div>
-        </div>
-    </div>
-    <script src="{{ asset('assets/vendors/jquery/dist/jquery.min.js') }}"></script>
-    <script>
-        $(window).on('load', function(){
-            // will first fade out the loading animation
-            jQuery(".status").fadeOut();
-            // will fade out the whole DIV that covers the website.
-            jQuery(".preloader").delay(0).fadeOut("slow");
-        });
-    </script>
-</body>
-
+         </a>
+      </div>
+      <div class="theme-switch-wrapper">
+         <label class="theme-switch" for="checkbox">
+            <input type="checkbox" id="checkbox" />
+            <div class="slider round"></div>
+            <i class="icofont-moon"></i>
+         </label>
+         <em>Enable Dark Mode!</em>
+      </div>
+      <!-- sign in -->
+      <section class="osahan-main-body osahan-signin-main">
+         <div class="container">
+            <div class="row d-flex align-items-center justify-content-center vh-100">
+               <div class="landing-page shadow-sm bg-success col-lg-5">
+                  <div class="osahan-slider m-0">
+                     <div class="osahan-slider-item text-center">
+                        <div class="d-flex align-items-center justify-content-center vh-100 flex-column">
+                           <i class="icofont-sale-discount display-1 text-warning"></i>
+                           <h4 class="my-4 text-white">Banyak Diskon Menarik</h4>
+                           <p class="text-center text-white-50 mb-5 px-4">Dapatkan diskon-diskon menarik untuk setiap produk</p>
+                        </div>
+                     </div>
+                     <div class="osahan-slider-item text-center">
+                        <div class="d-flex align-items-center justify-content-center vh-100 flex-column">
+                           <i class="icofont-cart display-1 text-warning"></i>
+                           <h4 class="my-4 text-white">Point Belanja</h4>
+                           <p class="text-center text-white-50 mb-5 px-4">Dapatkan point belanja setiap produk yang dibeli, lalu tukarkan dengan hadiah menarik dari kami</p>
+                        </div>
+                     </div>
+                     <div class="osahan-slider-item text-center">
+                        <div class="d-flex align-items-center justify-content-center vh-100 flex-column">
+                           <i class="icofont-support-faq display-1 text-warning"></i>
+                           <h4 class="my-4 text-white">One Stop Shopping</h4>
+                           <p class="text-center text-white-50 mb-5 px-4">Penuhi semua kebutuhan anda, mulai dari perlengkapan dapur, kebutuhan pokok, dll.</p>
+                        </div>
+                     </div>
+                  </div>
+               </div>
+               <div class="col-lg-7 pl-lg-5">
+                  <div class="osahan-signin shadow-sm bg-white p-4 rounded">
+                     <div class="p-3">
+                        <h2 class="my-0">Welcome Back</h2>
+                        <p class="small mb-4">Sign in to Continue.</p>
+                        <div class="row">
+                            <div class="col-md-12">
+                                @if ($message = Session::get('success'))
+                                    <div class="alert alert-success">
+                                        <button type="button" class="close" data-dismiss="alert">×</button>	
+                                        <strong>{{ $message }}</strong>
+                                    </div>
+                                @endif
+                            </div>
+                        </div>
+                        <form action="{{ route('login') }}" method="POST">
+                            @csrf
+                           <div class="form-group">
+                              <label for="exampleInputEmail1">Email</label>
+                              <input placeholder="Enter Email" type="email" name="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
+                              <div>
+                                    @if ($errors->has('email'))
+                                        <small class="form-text text-danger">{{ $errors->first('email') }}</small>
+                                    @endif
+                                </div>
+                           </div>
+                           <div class="form-group">
+                              <label for="exampleInputPassword1">Password</label>
+                              <input placeholder="Enter Password" type="password" name="password" class="form-control" id="exampleInputPassword1">
+                              <div>
+                                    @if ($errors->has('password'))
+                                        <small class="form-text text-danger">{{ $errors->first('password') }}</small>
+                                    @endif
+                                </div>
+                           </div>
+                           <button type="submit" class="btn btn-success btn-lg rounded btn-block">Login</button>
+                        </form>
+                        <p class="text-center mt-3 mb-0"><a href="{{ route('register_user') }}" class="text-dark">Belum memiliki akun? Daftar disini</a></p>
+                     </div>
+                  </div>
+               </div>
+            </div>
+         </div>
+      </section>
+      @include('frontend/_menu_android')
+      @include('js/frontend')
+   </body>
 </html>
-

@@ -59,6 +59,12 @@ class LoginController extends Controller
                         'alert-type' => 'success'
                     );
                     return redirect()->route('admin.dashboard')->with($notification1);
+                }elseif (auth()->user()->tipe_user == "pelanggan") {
+                    $notification1 = array(
+                        'message' => 'Yeay, anda berhasil login',
+                        'alert-type' => 'success'
+                    );
+                    return redirect()->route('home')->with($notification1);
                 }
             } else {
                 return redirect()->route('login')->with('error','Gagal, password atau username salah');

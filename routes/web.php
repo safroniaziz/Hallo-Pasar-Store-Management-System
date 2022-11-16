@@ -3,6 +3,7 @@
 use App\Http\Controllers\Admin\AdminDashboardController;
 use App\Http\Controllers\Admin\AdministratorController;
 use App\Http\Controllers\Admin\DriverController;
+use App\Http\Controllers\Admin\GiziProdukController;
 use App\Http\Controllers\Admin\KategoriProdukController;
 use App\Http\Controllers\Admin\KecamatanController;
 use App\Http\Controllers\Admin\KelurahanController;
@@ -15,6 +16,8 @@ use App\Http\Controllers\Admin\TransaksiController;
 use App\Http\Controllers\Admin\PelangganController;
 use App\Http\Controllers\Admin\PelangganPointController;
 use App\Http\Controllers\Admin\ProvinsiController;
+use App\Http\Controllers\Admin\TagController;
+use App\Http\Controllers\HomeProdukController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
@@ -30,13 +33,35 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', [FrontEndController::class, 'index'])->name('home');
+Route::get('/register_user', [FrontEndController::class, 'registerUser'])->name('register_user');
+Route::post('/register_user', [FrontEndController::class, 'registerUserPost'])->name('register_user_post');
+Route::prefix('produk')->group(function() {
+    Route::get('/',[HomeProdukController::class, 'produks'])->name('produks');
+    Route::get('{produk}/detail',[HomeProdukController::class, 'produkDetail'])->name('produk.detail');
+});
+
+Route::prefix('kategori')->group(function() {
+    Route::get('{kategoriProduk}/detail',[HomeProdukController::class, 'kategoriDetail'])->name('kategori.detail');
+});
 Auth::routes();
 
 // Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
+Route::get('/cari_kota',[TransaksiController::class, 'cariKota']);
+Route::get('/cari_kecamatan',[TransaksiController::class, 'cariKecamatan']);
+Route::get('/cari_kelurahan',[TransaksiController::class, 'cariKelurahan']);
+Route::get('/cari_ongkir',[TransaksiController::class, 'cariOngkir']);
+
 Route::middleware('auth')->group(function() {
     Route::middleware('isAdmin')->prefix('admin')->group(function() {
         Route::get('/dashboard',[AdminDashboardController::class, 'dashboard'])->name('admin.dashboard');
+
+        Route::prefix('manajemen_tag_produk')->group(function() {
+            Route::get('/',[TagController::class, 'index'])->name('admin.tag');
+            Route::get('/create',[TagController::class, 'create'])->name('admin.tag.create');
+            Route::post('/post',[TagController::class, 'store'])->name('admin.tag.post');
+            Route::delete('{tagProduk}/delete',[TagController::class, 'destroy'])->name('admin.tag.delete');
+        });
 
         Route::prefix('manajemen_kategori_produk')->group(function() {
             Route::get('/',[KategoriProdukController::class, 'index'])->name('admin.kategori_produk');
@@ -58,6 +83,11 @@ Route::middleware('auth')->group(function() {
             Route::post('/post_gambar',[ProdukController::class, 'fotoStore'])->name('admin.produk.foto_post_gambar');
             Route::delete('{foto_produk}/delete_foto',[ProdukController::class, 'fotoDestroy'])->name('admin.produk.delete_foto');
 
+            Route::prefix('kandungan_gizi')->group(function() {
+                Route::get('{produk}/',[GiziProdukController::class, 'index'])->name('admin.gizi_produk');
+                Route::post('/post',[GiziProdukController::class, 'post'])->name('admin.gizi_produk.post');
+                Route::delete('{giziProduk}/delete',[GiziProdukController::class, 'destroy'])->name('admin.gizi_produk.delete');
+            });
         });
 
         Route::prefix('metode_pembayaran')->group(function() {
@@ -119,11 +149,6 @@ Route::middleware('auth')->group(function() {
             Route::delete('{transaksi}/delete',[TransaksiController::class, 'destroy'])->name('admin.transaksi.delete');
             Route::get('{transaksi}/show',[TransaksiController::class, 'show'])->name('admin.transaksi.show');
 
-
-            Route::get('/cari_kota',[TransaksiController::class, 'cariKota']);
-            Route::get('/cari_kecamatan',[TransaksiController::class, 'cariKecamatan']);
-            Route::get('/cari_kelurahan',[TransaksiController::class, 'cariKelurahan']);
-            Route::get('/cari_ongkir',[TransaksiController::class, 'cariOngkir']);
         });
 
         Route::prefix('manajemen_data_operator')->group(function() {
