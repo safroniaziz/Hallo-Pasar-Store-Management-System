@@ -86,7 +86,7 @@ Route::middleware('auth')->group(function() {
             Route::prefix('kandungan_gizi')->group(function() {
                 Route::get('{produk}/',[GiziProdukController::class, 'index'])->name('admin.gizi_produk');
                 Route::post('/post',[GiziProdukController::class, 'post'])->name('admin.gizi_produk.post');
-                Route::delete('{giziProduk}/delete',[GiziProdukController::class, 'destroy'])->name('admin.gizi_produk.delete');
+                Route::delete('/{produk}/{id_tag}/delete',[GiziProdukController::class, 'destroy'])->name('admin.gizi_produk.delete');
             });
         });
 

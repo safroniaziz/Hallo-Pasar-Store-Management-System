@@ -7,7 +7,7 @@
       <meta name="description" content="">
       <meta name="author" content="">
       <link rel="icon" type="image/png" href="img/logo.svg">
-      <title>Grofarweb - Online Grocery Supermarket HTML Template</title>
+      <title>HalloPasar</title>
       @include('css/css')
    </head>
    <body class="fixed-bottom-padding">

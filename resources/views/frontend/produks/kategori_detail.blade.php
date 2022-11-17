@@ -7,7 +7,7 @@
       <meta name="description" content="">
       <meta name="author" content="">
       <link rel="icon" type="image/png" href="img/logo.svg">
-      <title>Grofarweb - Online Grocery Supermarket HTML Template</title>
+      <title>HalloPasar</title>
       <!-- Slick Slider -->
       <link rel="stylesheet" type="text/css" href="{{ asset('assets/front/vendor/slick/slick.min.css') }}"/>
       <link rel="stylesheet" type="text/css" href="{{ asset('assets/front/vendor/slick/slick-theme.min.css') }}"/>

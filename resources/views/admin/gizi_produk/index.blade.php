@@ -16,22 +16,24 @@
     <section class="content">
         <div class="box box-primary">
             <div class="box-header with-border">
-                <h3 class="box-title"><i class="fa fa-home"></i>&nbsp; Kandungan Gizi</h3>
-                <div class="pull-right">
-                    <a href="{{ route('admin.tag.create') }}" class="btn btn-primary btn-sm btn-flat"><i class="fa fa-plus"></i>&nbsp; Tambah</a>
-                </div>
+                <h3 class="box-title"><i class="fa fa-home"></i>&nbsp; Kandungan Gizi <b>{{ $produk->nama_produk }}</b></h3>
             </div>
             <div class="box-body">
                 <div class="row">
-                    <form action="">
+                    <form action="{{ route('admin.gizi_produk.post') }}" method="POST">
+                        {{ csrf_field() }} {{ method_field("POST") }}
                         <div class="form-group col-md-12">
                             <label for="">Pilih Kandungan Gizi</label>
+                            <input type="hidden" name="produk_id" value="{{ $produk->id }}">
                             <select name="tag_id" class="form-control" id="">
                                 <option disabled selected>-- pilih kandungan gizi --</option>
-                                @foreach ($collection as $item)
-                                    
+                                @foreach ($tags as $tag)
+                                    <option value="{{ $tag->id }}">{{ $tag->nama_tag }}</option>
                                 @endforeach
                             </select>
+                        </div>
+                        <div class="col-md-12" style="margin-bottom: 10px !important;">
+                            <button type="submit" class="btn btn-primary btn-sm btn-flat"><i class="fa fa-chek-circle"></i>&nbsp; Tambahkan</button>
                         </div>
                     </form>
                 </div>
@@ -41,6 +43,7 @@
                             <thead>
                                 <tr>
                                     <th>No</th>
+                                    <th>Produk</th>
                                     <th>Kandungan Gizi</th>
                                     <th>Aksi</th>
                                 </tr>
@@ -49,27 +52,13 @@
                                 @foreach ($produk->tags()->get() as $index=> $tag)
                                     <tr>
                                         <td>{{ $index+1 }}</td>
+                                        <td>{{ $produk->nama_produk }}</td>
                                         <td>{{ $tag->nama_tag }}</td>
                                         <td>
-                                            @if ($tag->nomor_rekening == null)
-                                                <a class="text-danger">-</a>
-                                            @else
-                                                {{ $tag->nomor_rekening }}
-                                            @endif
-                                        </td>
-                                        <td>{{ $tag->keterangan }}</td>
-                                        <td>
-                                            <table>
-                                                <tr>
-                                                    <td>
-                                                        <form action="{{ route('admin.tag.delete',[$tag->id]) }}" method="POST">
-                                                            {{ csrf_field() }} {{ method_field("DELETE") }}
-                                                            <a href="" onClick="return confirm('Apakah anda yakin menghapus data ini?')"/><button type="submit" class="btn btn-danger btn-sm btn-flat"><i class="fa fa-trash"></i>&nbsp; Hapus</button></a>
-
-                                                        </form>
-                                                    </td>
-                                                </tr>
-                                            </table>
+                                            <form action="{{ route('admin.gizi_produk.delete',[$produk->id,$tag->id]) }}" method="POST">
+                                                {{ csrf_field() }} {{ method_field("DELETE") }}
+                                                <a href="" onClick="return confirm('Apakah anda yakin menghapus data ini?')"/><button type="submit" class="btn btn-danger btn-sm btn-flat"><i class="fa fa-trash"></i>&nbsp; Hapus</button></a>
+                                            </form>
                                         </td>
                                     </tr>
                                 @endforeach

@@ -134,7 +134,7 @@ var $main_nav = $('#main-nav');
       disableAt: false,
       customToggle: $toggle,
       levelSpacing: 40,
-      navTitle: 'Askbootstrap',
+      navTitle: 'HalloPasar',
       levelTitles: true,
       levelTitleAsBack: true,
       pushContent: '#container',

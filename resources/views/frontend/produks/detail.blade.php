@@ -6,22 +6,19 @@
       <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
       <meta name="description" content="">
       <meta name="author" content="">
-      <link rel="icon" type="image/png" href="img/logo.svg">
-      <title>Grofarweb - Online Grocery Supermarket HTML Template</title>
+      <link rel="icon" type="image/png" href="{{ asset('assets/images/logo.png') }}">
+      <title>HalloPasar</title>
       @include('css/frontend')
    </head>
    <body class="fixed-bottom-padding">
       <div class="border-bottom p-3 d-none mobile-nav">
          <div class="title d-flex align-items-center">
             <a href="home.html" class="text-decoration-none text-dark d-flex align-items-center">
-               <img class="osahan-logo mr-2" src="img/logo.svg">
-               <h4 class="font-weight-bold text-success m-0">Grocery</h4>
+               <img class="osahan-logo mr-2" src="{{ asset('assets/images/logo.png') }}">
+               <h4 class="font-weight-bold text-success m-0">HalloPasar</h4>
             </a>
             <p class="ml-auto m-0">
-               <a href="listing.html" class="text-decoration-none bg-white p-1 rounded shadow-sm d-flex align-items-center">
-               <i class="text-dark icofont-sale-discount"></i>
-               <span class="badge badge-danger p-1 ml-1 small">50%</span>
-               </a>
+               
             </p>
             <a class="toggle ml-3" href="#"><i class="icofont-navigation-menu"></i></a>
          </div>
@@ -153,7 +150,7 @@
                                 @if (Auth::check())
                                     Rp.{{ number_format(Auth::user()->village->ongkir) }}
                                 @else
-                                    <a href="" data-toggle="modal" data-target="#login"><i class="fa fa-sign-in"></i>Login untuk cek ongkir</a>
+                                    <a href="" data-toggle="modal" data-target="#login"><i class="fa fa-sign-in"></i>&nbsp;Login untuk cek ongkir</a>
                                 @endif
                               </p>
                            </div>
@@ -165,6 +162,16 @@
                            </div>
                         </div>
                      </div>
+                     <div class="pt-4">
+                        <div class="row">
+                           <div class="col-6">
+                              <p class="font-weight-bold m-0">Kandungan Gizi</p>
+                                 @foreach ($produk->tags()->get() as $tag)
+                                     <li>{{ $tag->nama_tag }}</li>
+                                 @endforeach
+                           </div>
+                        </div>
+                     </div>
                      <div class="details">
                         <div class="pt-3">
                             <p class="font-weight-bold mb-2">Deskripsi Produk</p>
@@ -173,14 +180,13 @@
                              </p>
                          </div>
                         <div class="pt-3 bg-white">
-                              <a class="ml-auto" href="#">
-                                 <form id='myform' class="cart-items-number d-flex" method='POST' action='#'>
-                                    <input type='button' value='-' class='qtyminus btn btn-success btn-sm' field='quantity' />
-                                    <input type='text' name='quantity' value='1' class='qty form-control' />
-                                    <input type='button' value='+' class='qtyplus btn btn-success btn-sm' field='quantity' />
-                                 </form>
-                              </a>
-                            <a href="cart.html" class="btn btn-success p-2 mt-2 rounded d-flex align-items-center justify-content-center btn-sm "><i class="icofont-cart m-0 mr-2"></i> Tambah Keranjang</a>
+                           <p style="margin-bottom: 0px !important;">Satuan Produk: {{ $produk->satuan }}</p>
+                           <form id='myform' class="cart-items-number d-flex d-flex" method='POST' action='#'>
+                              <input type='button' value='-' class='qtyminus btn btn-success btn-sm' field='quantity' />
+                              <input type='text' name='quantity' id="quantity" value='1' class='qty form-control' />
+                              <input type='button' value='+' class='qtyplus btn btn-success btn-sm' field='quantity' /> <br>
+                           </form>
+                            <a href="javascript:void(0);" id="tambahKeranjang" class="btn btn-success p-2 mt-2 rounded d-flex align-items-center justify-content-center btn-sm "><i class="icofont-cart m-0 mr-2"></i> Tambah Keranjang</a>
                         </div>
                         
                      </div>
@@ -214,5 +220,13 @@
         </section>
      </footer>
       @include('js/frontend')
+      <script type="text/javascript">
+         $('#tambahKeranjang').on('click',function(e){
+            e.preventDefault();
+
+            var quantity = $('#quantity').val();
+            alert(quantity);
+         });
+      </script>
    </body>
 </html>

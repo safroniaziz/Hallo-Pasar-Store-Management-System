@@ -7,7 +7,7 @@
       <meta name="description" content="">
       <meta name="author" content="">
       <link rel="icon" type="image/png" href="img/logo.svg">
-      <title>Grofarweb - Online Grocery Supermarket HTML Template</title>
+      <title>HalloPasar</title>
       <!-- Slick Slider -->
       @include('css/frontend')
 
@@ -17,14 +17,11 @@
       <div class="border-bottom p-3 d-none mobile-nav">
          <div class="title d-flex align-items-center">
             <a href="home.html" class="text-decoration-none text-dark d-flex align-items-center">
-               <img class="osahan-logo mr-2" src="img/logo.svg">
-               <h4 class="font-weight-bold text-success m-0">Grocery</h4>
+               <img class="osahan-logo mr-2" src="{{ asset('assets/images/logo.png') }}">
+               <h4 class="font-weight-bold text-success m-0">HalloPasar</h4>
             </a>
             <p class="ml-auto m-0">
-               <a href="listing.html" class="text-decoration-none bg-white p-1 rounded shadow-sm d-flex align-items-center">
-               <i class="text-dark icofont-sale-discount"></i>
-               <span class="badge badge-danger p-1 ml-1 small">50%</span>
-               </a>
+               
             </p>
             <a class="toggle ml-3" href="#"><i class="icofont-navigation-menu"></i></a>
          </div>
