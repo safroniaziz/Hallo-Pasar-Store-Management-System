@@ -18,7 +18,7 @@ return new class extends Migration
             $table->unsignedBigInteger('pelanggan_id');
             $table->unsignedBigInteger('metode_pembayaran_id');
             $table->string('nama_pelanggan');
-            $table->char('district_id')->nullable();
+            $table->char('village_id')->nullable();
             $table->string('kelurahan');
             $table->string('provinsi')->nullable();
             $table->string('kab_kota')->nullable();
@@ -31,7 +31,7 @@ return new class extends Migration
             $table->string('nama_driver');
             $table->timestamps();
             
-            $table->foreign('district_id')->references('id')->on('districts');
+            $table->foreign('village_id')->references('id')->on('villages');
             $table->foreign('pelanggan_id')->references('id')->on('users');
             $table->foreign('metode_pembayaran_id')->references('id')->on('metode_pembayarans');
             $table->foreign('driver_id')->references('id')->on('users');

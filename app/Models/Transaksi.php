@@ -17,6 +17,7 @@ class Transaksi extends Model
         'total_belanja',
         'ongkir',
         'tambahan',
+        'total_diskon',
         'total_bayar',
         'driver_id',
         'nama_driver',

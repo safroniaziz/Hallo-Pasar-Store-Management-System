@@ -53,10 +53,12 @@ Route::get('/cari_kecamatan',[TransaksiController::class, 'cariKecamatan']);
 Route::get('/cari_kelurahan',[TransaksiController::class, 'cariKelurahan']);
 Route::get('/cari_ongkir',[TransaksiController::class, 'cariOngkir']);
 
-Route::get('/cart',[CartController::class, 'cart'])->name('cart');
-Route::post('/cart_post',[CartController::class, 'post'])->name('cart.post');
-
 Route::middleware('auth')->group(function() {
+    Route::get('/cart',[CartController::class, 'cart'])->name('cart');
+    Route::post('/cart_post',[CartController::class, 'post'])->name('cart.post');
+    Route::get('/cari_metode_pembayaran',[CartController::class, 'cariMetode'])->name('cart.cari_metode_pembayaran');
+    Route::post('/transaksi',[CartController::class, 'cartTransaksi'])->name('cart.transaksi');
+
     Route::middleware('isAdmin')->prefix('admin')->group(function() {
         Route::get('/dashboard',[AdminDashboardController::class, 'dashboard'])->name('admin.dashboard');
 

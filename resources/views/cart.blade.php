@@ -154,7 +154,8 @@
                            </div>
                         </div>
                         <div>
-                           <form>
+                           <form method="POST" action="{{ route('cart.transaksi') }}">
+                              {{ csrf_field() }} {{ method_field('POST') }}
                               <div class="bg-white p-3 clearfix" style="padding-bottom: 0px !important;">
                                  <p class="font-weight-bold small mb-2">Metode Pembayaran</p>
                                  <div class="tab-content bg-white" id="myTabContent">
@@ -163,71 +164,51 @@
                                           <div class="form-row">
                                              <div class="col-md-12 form-group">
                                                 <label class="form-label font-weight-bold small">Pilih Metode Pembayaran</label>
-                                                <select name="metode_pembayaran" class="form-control" id="">
+                                                <select name="metode_pembayaran" class="form-control" id="metode_pembayaran">
                                                    <option disabled selected>-- pilih metode pembayaran --</option>
                                                    @foreach ($metodes as $metode)
                                                        <option value="{{ $metode->id }}">{{ $metode->nama_metode }}</option>
                                                    @endforeach
                                                 </select>
+                                                <div>
+                                                   @if ($errors->has('metode_pembayaran'))
+                                                       <small class="form-text text-danger">{{ $errors->first('metode_pembayaran') }}</small>
+                                                   @endif
+                                               </div>
+                                             </div>
+                                             <div class="col-md-12 alert alert-info" id="cod" style="display: none">
+
+                                             </div>
+                                             <div class="col-md-12 form-group" id="transfer" style="display: none">
+                                                <p class="mb-1">Silahkan Transfer Ke  <span class="float-right text-dark" id="tujuan_transfer"></span></p>
+                                                <p class="mb-1">Nomor Rekening <span class="float-right text-dark" id="nomor_rekening"></span></p>
+                                                <p class="mb-1">Atas Nama <span class="float-right text-dark" id="atas_nama"></span></p>
                                              </div>
                                           </div>
                                        </div>
                                     </div>
-                                    <div class="tab-pane fade" id="banking" role="tabpanel" aria-labelledby="banking-tab">
-                                       <div class="osahan-card-body pt-3">
-                                          <form>
-                                             <div class="btn-group btn-group-toggle w-100" data-toggle="buttons">
-                                                <label class="btn btn-outline-secondary active">
-                                                <input type="radio" name="options" id="option1" checked=""> HDFC
-                                                </label>
-                                                <label class="btn btn-outline-secondary">
-                                                <input type="radio" name="options" id="option2"> ICICI
-                                                </label>
-                                                <label class="btn btn-outline-secondary">
-                                                <input type="radio" name="options" id="option3"> AXIS
-                                                </label>
-                                             </div>
-                                             <div class="form-row pt-3">
-                                                <div class="col-md-12 form-group">
-                                                   <label class="form-label small font-weight-bold">Select Bank</label><br>
-                                                   <select class="custom-select form-control">
-                                                      <option>Bank</option>
-                                                      <option>KOTAK</option>
-                                                      <option>SBI</option>
-                                                      <option>UCO</option>
-                                                   </select>
-                                                </div>
-                                             </div>
-                                          </form>
-                                       </div>
-                                    </div>
-                                    <div class="tab-pane fade" id="cash" role="tabpanel" aria-labelledby="cash-tab">
-                                       <div class="custom-control custom-checkbox pt-3">
-                                          <input type="checkbox" class="custom-control-input" id="customControlAutosizing">
-                                          <label class="custom-control-label" for="customControlAutosizing">
-                                             <b>Cash</b><br>
-                                             <p class="small text-muted m-0">Please keep exact change handy to help us serve you better</p>
-                                          </label>
-                                       </div>
-                                    </div>
                                  </div>
+                              </div>
+                              <input type="text" name="metode_pembayaran" id="metode_pembayaran_id">
+                              <input type="hidden" name="total_belanja" value="{{ Auth::user()->carts()->sum('total_harga') }}">
+                              <input type="hidden" name="ongkir" value="{{ Auth::user()->carts()->sum('total_diskon') }}">
+                              <input type="hidden" name="tambahan" value="{{ Auth::user()->carts()->sum('total_tambahan') }}">
+                              <div class="bg-white p-3 clearfix">
+                                 <p class="font-weight-bold small mb-2">Detail Pembayaran</p>
+                                 <p class="mb-1">Total Item Barang <span class="small text-muted">({{ Auth::user()->carts()->get()->count() }} Item)</span> <span class="float-right text-dark">Rp.{{ number_format(Auth::user()->carts()->sum('total_harga')) }}</span></p>
+                                 <p class="mb-1">Biaya Tambahan (parkir, dll) <span class="float-right text-dark">Rp.{{ number_format(Auth::user()->carts()->sum('total_tambahan')) }}</span></p>
+                                 <p class="mb-3">Ongkos Kirim <span  data-toggle="tooltip" data-placement="top" title="Delivery partner fee - $3" class="text-info ml-1"></span><span class="float-right text-dark">Rp.{{ number_format(Auth::user()->village->ongkir) }}</span></p>
+                                 <h6 class="mb-0 text-muted">Total Harga<span class="float-right text-muted">Rp.{{ number_format(Auth::user()->carts()->sum('total_tambahan') + Auth::user()->carts()->sum('total_harga') + Auth::user()->village->ongkir) }}</span></h6>
+                                 <h6 class="mb-0 text-success">Diskon<span class="float-right text-success">Rp.{{ number_format(Auth::user()->carts()->sum('total_diskon')) }}</span></h6>
+                              </div>
+                              <div class="p-3 border-top">
+                                 <h5 class="mb-0">Total Dibayarkan  <span class="float-right text-danger">{{ number_format((Auth::user()->carts()->sum('total_tambahan') + Auth::user()->carts()->sum('total_harga') + Auth::user()->village->ongkir) - Auth::user()->carts()->sum('total_diskon')) }}</span></h5>
+                              </div>
+                              <div class="p-3 border-top">
+                                 <button type="submit" style="width: 100%" class="btn btn-primary btn-flat"><i class="fa fa-check-circle"></i>&nbsp; Lanjutkan</button>
                               </div>
                            </form>
 
-                           <div class="bg-white p-3 clearfix">
-                              <p class="font-weight-bold small mb-2">Detail Pembayaran</p>
-                              <p class="mb-1">Total Item Barang <span class="small text-muted">({{ Auth::user()->carts()->get()->count() }} Item)</span> <span class="float-right text-dark">Rp.{{ number_format(Auth::user()->carts()->sum('total_harga')) }}</span></p>
-                              <p class="mb-1">Biaya Tambahan (parkir, dll) <span class="float-right text-dark">Rp.{{ number_format(Auth::user()->carts()->sum('total_tambahan')) }}</span></p>
-                              <p class="mb-3">Ongkos Kirim <span  data-toggle="tooltip" data-placement="top" title="Delivery partner fee - $3" class="text-info ml-1"></span><span class="float-right text-dark">Rp.{{ number_format(Auth::user()->village->ongkir) }}</span></p>
-                              <h6 class="mb-0 text-muted">Total Harga<span class="float-right text-muted">Rp.{{ number_format(Auth::user()->carts()->sum('total_tambahan') + Auth::user()->carts()->sum('total_harga') + Auth::user()->village->ongkir) }}</span></h6>
-                              <h6 class="mb-0 text-success">Diskon<span class="float-right text-success">Rp.{{ number_format(Auth::user()->carts()->sum('total_diskon')) }}</span></h6>
-                           </div>
-                           <div class="p-3 border-top">
-                              <h5 class="mb-0">Total Dibayarkan  <span class="float-right text-danger">{{ number_format((Auth::user()->carts()->sum('total_tambahan') + Auth::user()->carts()->sum('total_harga') + Auth::user()->village->ongkir) - Auth::user()->carts()->sum('total_diskon')) }}</span></h5>
-                           </div>
-                           <div class="p-3 border-top">
-                              <button type="submit" style="width: 100%" class="btn btn-primary btn-flat"><i class="fa fa-check-circle"></i>&nbsp; Lanjutkan</button>
-                           </div>
                         </div>
                      </div>
                      <p class="text-success text-center">Anda menghemat sebanyak Rp.{{ number_format(Auth::user()->carts()->sum('total_diskon')) }} </p>
@@ -260,5 +241,33 @@
         </section>
      </footer>
       @include('js/frontend')
+      <script>
+      $(document).on('change','#metode_pembayaran',function(){
+        var metode_pembayaran = $(this).val();
+
+         $.ajax({
+         type :'get',
+         url: "{{ url('cari_metode_pembayaran') }}",
+         data:{'metode_pembayaran':metode_pembayaran},
+               success:function(data){
+                  if (data.id == 1) {
+                     $('#metode_pembayaran_id').val(metode_pembayaran);
+                     $('#transfer').hide();
+                     $('#cod').show();
+                     $('#cod').text('Silahkan perhatikan alamat anda untuk melakukan transaksi Cash On Delivery');
+                  }else{
+                     $('#transfer').show();
+                     $('#cod').hide();
+                     $('#tujuan_transfer').text(data.nama_metode);
+                     $('#nomor_rekening').text(data.nomor_rekening);
+                     $('#atas_nama').text(data.keterangan);
+                  }
+                  
+               },
+                  error:function(){
+               }
+         });
+    });
+      </script>
    </body>
 </html>
