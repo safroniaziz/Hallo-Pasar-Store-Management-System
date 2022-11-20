@@ -20,6 +20,7 @@ class Transaksi extends Model
         'total_bayar',
         'driver_id',
         'nama_driver',
+        'status_transaksi'
     ];
 
     public function pelanggan(){

@@ -13,4 +13,8 @@ class Cart extends Model
     public function produk(){
         return $this->belongsTo(Produk::class);
     }
+
+    // public function getTotalHargaAttribute(){
+    //     return $this->
+    // }
 }
