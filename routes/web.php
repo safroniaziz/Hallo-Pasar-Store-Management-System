@@ -17,6 +17,7 @@ use App\Http\Controllers\Admin\PelangganController;
 use App\Http\Controllers\Admin\PelangganPointController;
 use App\Http\Controllers\Admin\ProvinsiController;
 use App\Http\Controllers\Admin\TagController;
+use App\Http\Controllers\CartController;
 use App\Http\Controllers\HomeProdukController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
@@ -51,6 +52,9 @@ Route::get('/cari_kota',[TransaksiController::class, 'cariKota']);
 Route::get('/cari_kecamatan',[TransaksiController::class, 'cariKecamatan']);
 Route::get('/cari_kelurahan',[TransaksiController::class, 'cariKelurahan']);
 Route::get('/cari_ongkir',[TransaksiController::class, 'cariOngkir']);
+
+Route::get('/cart',[CartController::class, 'cart'])->name('cart');
+Route::post('/cart_post',[CartController::class, 'post'])->name('cart.post');
 
 Route::middleware('auth')->group(function() {
     Route::middleware('isAdmin')->prefix('admin')->group(function() {

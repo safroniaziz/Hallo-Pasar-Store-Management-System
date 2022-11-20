@@ -6,6 +6,7 @@
       <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
       <meta name="description" content="">
       <meta name="author" content="">
+      <meta name="csrf-token" content="{{ csrf_token() }}" />
       <link rel="icon" type="image/png" href="{{ asset('assets/images/logo.png') }}">
       <title>HalloPasar</title>
       @include('css/frontend')
@@ -59,8 +60,8 @@
                <!-- login/signup -->
                @if (Auth::check())
                   <!-- cart -->
-                  <a href="cart.html" class="ml-2 text-dark bg-light rounded-pill p-2 icofont-size border shadow-sm">
-                     <i class="icofont-shopping-cart"></i>
+                  <a href="{{ route('cart') }}" class="ml-2 text-dark bg-light rounded-pill p-2 icofont-size border shadow-sm">
+                     <i class="icofont-shopping-cart"></i>&nbsp;<label class="text-danger"  style="font-size: 15px; font-weight:bold">{{ Auth::user()->carts()->get()->count() }}</label>
                   </a>
                   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                   <!-- my account -->
@@ -150,7 +151,7 @@
                                 @if (Auth::check())
                                     Rp.{{ number_format(Auth::user()->village->ongkir) }}
                                 @else
-                                    <a href="" data-toggle="modal" data-target="#login"><i class="fa fa-sign-in"></i>&nbsp;Login untuk cek ongkir</a>
+                                    <a href="{{ URL('/login') }}"><i class="fa fa-sign-in"></i>&nbsp;Login untuk cek ongkir</a>
                                 @endif
                               </p>
                            </div>
@@ -166,9 +167,13 @@
                         <div class="row">
                            <div class="col-6">
                               <p class="font-weight-bold m-0">Kandungan Gizi</p>
-                                 @foreach ($produk->tags()->get() as $tag)
-                                     <li>{{ $tag->nama_tag }}</li>
-                                 @endforeach
+                                 @if ($produk->tags()->count() > 0)
+                                    @foreach ($produk->tags()->get() as $tag)
+                                          <li>{{ $tag->nama_tag }}</li>
+                                    @endforeach
+                                 @else
+                                    <a class="text-danger">-</a>
+                                 @endif
                            </div>
                         </div>
                      </div>
@@ -179,9 +184,10 @@
                              {{ $produk->deskripsi }}
                              </p>
                          </div>
+                         <input type="hidden" name="produk_id" id="produk_id" value="{{ $produk->id }}">
                         <div class="pt-3 bg-white">
                            <p style="margin-bottom: 0px !important;">Satuan Produk: {{ $produk->satuan }}</p>
-                           <form id='myform' class="cart-items-number d-flex d-flex" method='POST' action='#'>
+                           <form id='myform' class="cart-items-number d-flex d-flex">
                               <input type='button' value='-' class='qtyminus btn btn-success btn-sm' field='quantity' />
                               <input type='text' name='quantity' id="quantity" value='1' class='qty form-control' />
                               <input type='button' value='+' class='qtyplus btn btn-success btn-sm' field='quantity' /> <br>
@@ -194,7 +200,7 @@
                </div>
             </div>
             <h5 class="mt-3 mb-3">Paketan Hemat Tanpa Repot</h5>
-                @include('frontend/_produks')
+               @include('frontend/_produks')
          </div>
       </section>
       @include('frontend/_menu_android')
@@ -225,7 +231,39 @@
             e.preventDefault();
 
             var quantity = $('#quantity').val();
-            alert(quantity);
+            var produk_id = $('#produk_id').val();
+            let form_url="{{ route('cart.post') }}";
+
+            var form = new FormData();
+            form.append('quantity',quantity);
+            form.append('produk_id',produk_id);
+            let token="{{ csrf_token() }}";
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                }
+            });
+
+            $.ajax({
+                type: "post",
+                url: "{{ route('cart.post') }}",
+                data: form,
+                contentType: false,
+                processData: false,
+                success: function (data) {
+                    window.location.href = "{{ route('cart') }}";
+                    toastr.success('Berhasil', 'produk ditambahkan ke keranjang', {
+                        timeOut: 1000,
+                        preventDuplicates: true,
+                        positionClass: 'toast-top-right',
+                    });
+                },
+                error: function(err){
+                  //   $('#nama_kategori_error').show();
+                  //   $('#nama_kategori_error').text(err.responseJSON['errors'].nama_kategori[0]);
+                    // consol class="text-danger text-muted"e.log(err.responseJSON['errors'].nama_kategori[0]); class="text-danger text-muted"
+                }
+            });
          });
       </script>
    </body>

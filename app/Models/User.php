@@ -70,4 +70,8 @@ class User extends Authenticatable
     public function village(){
         return $this->belongsTo(Village::class);
     }
+
+    public function carts(){
+        return $this->hasMany(Cart::class);
+    }
 }
