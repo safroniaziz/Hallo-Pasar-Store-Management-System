@@ -192,7 +192,11 @@
                               <input type='text' name='quantity' id="quantity" value='1' class='qty form-control' />
                               <input type='button' value='+' class='qtyplus btn btn-success btn-sm' field='quantity' /> <br>
                            </form>
-                            <a href="javascript:void(0);" id="tambahKeranjang" class="btn btn-success p-2 mt-2 rounded d-flex align-items-center justify-content-center btn-sm "><i class="icofont-cart m-0 mr-2"></i> Tambah Keranjang</a>
+                           @if (Auth::check())
+                              <a href="javascript:void(0);" id="tambahKeranjang" class="btn btn-success p-2 mt-2 rounded d-flex align-items-center justify-content-center btn-sm "><i class="icofont-cart m-0 mr-2"></i> Tambah Keranjang</a>
+                           @else
+                              <a href="{{ route('login') }}" class="btn btn-success p-2 mt-2 rounded d-flex align-items-center justify-content-center btn-sm "><i class="icofont-cart m-0 mr-2"></i> Tambah Keranjang</a>
+                           @endif
                         </div>
                         
                      </div>
