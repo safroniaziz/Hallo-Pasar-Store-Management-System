@@ -55,7 +55,11 @@ Route::get('/cari_ongkir',[TransaksiController::class, 'cariOngkir']);
 
 Route::middleware('auth')->group(function() {
     Route::get('/cart',[CartController::class, 'cart'])->name('cart');
+    Route::get('/successful',[CartController::class, 'successful'])->name('successful');
     Route::post('/cart_post',[CartController::class, 'post'])->name('cart.post');
+    Route::delete('{cart}/cart_delete',[CartController::class, 'delete'])->name('cart.delete');
+    Route::post('/cart_update',[CartController::class, 'cartUpdate'])->name('cart.update');
+    Route::post('/cart_update_kurangi',[CartController::class, 'cartUpdateKurangi'])->name('cart.update_kurangi');
     Route::get('/cari_metode_pembayaran',[CartController::class, 'cariMetode'])->name('cart.cari_metode_pembayaran');
     Route::post('/transaksi',[CartController::class, 'cartTransaksi'])->name('cart.transaksi');
 

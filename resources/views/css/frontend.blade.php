@@ -10,4 +10,5 @@
 <!-- Sidebar CSS -->
 <link href="{{ asset('assets/front/vendor/sidebar/demo.css') }}" rel="stylesheet">
 <link rel="stylesheet" href="{{ asset('assets/bower_components/font-awesome/css/font-awesome.min.css') }}">
+<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.1.4/toastr.min.css">
 @include('css/tambahan')

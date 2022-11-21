@@ -9,6 +9,8 @@ class PelangganPoint extends Model
 {
     use HasFactory;
 
+    protected $guarded = [];
+    
     public function pelanggan(){
         return $this->belongsTo(User::class);
     }

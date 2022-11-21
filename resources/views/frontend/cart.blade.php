@@ -7,6 +7,7 @@
       <meta name="description" content="">
       <meta name="author" content="">
       <link rel="icon" type="image/png" href="img/logo.svg">
+      <meta name="csrf-token" content="{{ csrf_token() }}" />
       <title>Grofarweb - Online Grocery Supermarket HTML Template</title>
       <!-- Slick Slider -->
       @include('css/frontend')
@@ -124,15 +125,19 @@
                                         <a class="ml-3 text-dark text-decoration-none w-100">
                                             <h5 class="mb-1">{{ $cart->produk->nama_produk }}</h5>
                                             <p class="text-success mb-2">Rp.{{ number_format($cart->produk->harga) }}</del></p>
+                                            
                                             <div class="d-flex align-items-center">
                                                 <p class="total_price font-weight-bold m-0">Rp.{{ number_format($cart->total_harga) }}</p>
-                                                <form id='myform' class=" d-flex ml-auto" method='POST'>
-                                                    <div class="form-group">
-                                                        <label for="">Jumlah</label>
-                                                        <input type="number" class="form-control" value="{{ $cart->jumlah }}">
-                                                    </div>
+                                                <form id='myform' class="cart-items-number d-flex ml-auto" method='POST' action='#'>
+                                                   <input type='button' value='-' data-val="{{ $cart->id }}" min="1" class='qtyminus btn btn-success btn-sm kurangiJumlah' field='quantity{{ $cart->id }}' id="minus{{ $cart->id }}" />
+                                                   <input type='text' name='quantity{{ $cart->id }}' id="{{ $cart->id }}" value='{{ $cart->jumlah }}' class='qty form-control'/>
+                                                   <input type='button' data-val="{{ $cart->id }}" value='+' class='qtyplus btn btn-success btn-sm ubahJumlah' onkeypress="quantity(this)" field='quantity{{ $cart->id }}' id="quantity{{ $cart->id }}"/>
                                                 </form>
                                             </div>
+                                            <form action="{{ route('cart.delete',[$cart->id]) }}" method="POST">
+                                                {{ csrf_field() }} {{ method_field('DELETE') }}
+                                                <button type="submit" class="btn btn-danger btn-sm btn-flat"><i class="fa fa-trash"></i>&nbsp; </button>
+                                          </form>
                                         </a>
                                         </div>
                                     </div>
@@ -189,10 +194,12 @@
                                     </div>
                                  </div>
                               </div>
-                              <input type="text" name="metode_pembayaran" id="metode_pembayaran_id">
+                              <input type="hidden" name="metode_pembayaran" id="metode_pembayaran_id">
+                              
                               <input type="hidden" name="total_belanja" value="{{ Auth::user()->carts()->sum('total_harga') }}">
-                              <input type="hidden" name="ongkir" value="{{ Auth::user()->carts()->sum('total_diskon') }}">
-                              <input type="hidden" name="tambahan" value="{{ Auth::user()->carts()->sum('total_tambahan') }}">
+                              <input type="hidden" name="ongkir" value="{{ Auth::user()->village->ongkir }}">
+                              <input type="hidden" name="total_tambahan" value="{{ Auth::user()->carts()->sum('total_tambahan') }}">
+                              <input type="hidden" name="total_diskon" value="{{ Auth::user()->carts()->sum('total_diskon') }}">
                               <div class="bg-white p-3 clearfix">
                                  <p class="font-weight-bold small mb-2">Detail Pembayaran</p>
                                  <p class="mb-1">Total Item Barang <span class="small text-muted">({{ Auth::user()->carts()->get()->count() }} Item)</span> <span class="float-right text-dark">Rp.{{ number_format(Auth::user()->carts()->sum('total_harga')) }}</span></p>
@@ -242,8 +249,91 @@
      </footer>
       @include('js/frontend')
       <script>
+
+      // function quantity(arg){
+      //    var id = arg.getAttribute('id');
+      //    var value = arg.value;
+      //    alert(value);
+      // }
+      $('.kurangiJumlah').on('click',function(e){
+         e.preventDefault();
+         var id = $(this).data('val');
+         var cart_id = $('#'+id).val();
+         let form_url="{{ route('cart.update_kurangi') }}";
+
+         var form = new FormData();
+         form.append('id',id);
+         let token="{{ csrf_token() }}";
+         $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                }
+            });
+         $.ajax({
+               type: "post",
+               url: "{{ route('cart.update_kurangi') }}",
+               data: form,
+               contentType: false,
+               processData: false,
+               success: function (data) {
+                  if (data.jumlah <1) {
+                     $('#minus'+id).attr('disabled',true);
+                  }
+               window.location.href = "{{ route('cart') }}";
+                 $('#nama_kategori_error').hide();
+                 toastr.success('Berhasil', 'jumlah produk dikeranjang berhasil diubah', {
+                     timeOut: 1000,
+                     preventDuplicates: true,
+                     positionClass: 'toast-top-right',
+                 });
+               },
+               error: function(err){
+               //   $('#nama_kategori_error').show();
+               //   $('#nama_kategori_error').text(err.responseJSON['errors'].nama_kategori[0]);
+                  // consol class="text-danger text-muted"e.log(err.responseJSON['errors'].nama_kategori[0]); class="text-danger text-muted"
+               }
+         });
+      });
+
+      $('.ubahJumlah').on('click',function(e){
+         e.preventDefault();
+         var id = $(this).data('val');
+         var cart_id = $('#'+id).val();
+         let form_url="{{ route('cart.update') }}";
+
+         var form = new FormData();
+         form.append('id',id);
+         let token="{{ csrf_token() }}";
+         $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                }
+            });
+         $.ajax({
+               type: "post",
+               url: "{{ route('cart.update') }}",
+               data: form,
+               contentType: false,
+               processData: false,
+               success: function (data) {
+               window.location.href = "{{ route('cart') }}";
+                 $('#nama_kategori_error').hide();
+                 toastr.success('Berhasil', 'jumlah produk dikeranjang berhasil diubah', {
+                     timeOut: 1000,
+                     preventDuplicates: true,
+                     positionClass: 'toast-top-right',
+                 });
+               },
+               error: function(err){
+               //   $('#nama_kategori_error').show();
+               //   $('#nama_kategori_error').text(err.responseJSON['errors'].nama_kategori[0]);
+                  // consol class="text-danger text-muted"e.log(err.responseJSON['errors'].nama_kategori[0]); class="text-danger text-muted"
+               }
+         });
+      });
+
       $(document).on('change','#metode_pembayaran',function(){
-        var metode_pembayaran = $(this).val();
+        var metode_pembayaran = $('#metode_pembayaran').val();
 
          $.ajax({
          type :'get',
@@ -256,6 +346,7 @@
                      $('#cod').show();
                      $('#cod').text('Silahkan perhatikan alamat anda untuk melakukan transaksi Cash On Delivery');
                   }else{
+                     $('#metode_pembayaran_id').val(metode_pembayaran);
                      $('#transfer').show();
                      $('#cod').hide();
                      $('#tujuan_transfer').text(data.nama_metode);

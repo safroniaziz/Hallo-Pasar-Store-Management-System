@@ -9,6 +9,8 @@ class TransaksiDetail extends Model
 {
     use HasFactory;
 
+    protected $guarded = [];
+
     public function transaksi(){
         return $this->belongsTo(Transaksi::class);
     }
